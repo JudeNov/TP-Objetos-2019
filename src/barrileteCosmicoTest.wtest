@@ -1,10 +1,57 @@
 import barrileteCosmico.*
 
-describe "Barrilete Cósmico" {
 
-	test "true es true" {
-		assert.that(true)
+
+describe "Barrilete Cósmico" {
+	
+		var destinosDestacados
+		var listaDestinos
+		var garlicSea
+		var lastToninas
+		var silversSea
+		var goodAirs
+		
+		fixture{
+			
+			garlicSea = new Destino()
+			garlicSea.nombre("Garlic´s Sea")
+			garlicSea.precio(2500)
+			garlicSea.equipaje(["Caña de Pescar", "Piloto"])
+			
+			silversSea = new Destino()
+			silversSea.nombre("Silver's Sea")
+			silversSea.precio(1350)
+			silversSea.equipaje(["Protector Solar","Equipo de Buceo"])
+			
+			lastToninas = new Destino()
+			lastToninas.nombre("Last Toninas")
+			lastToninas.precio(3500)
+			lastToninas.equipaje(["Vacuna Gripal","Vacuna B","Necronomicon"])
+			
+			goodAirs= new Destino()
+			goodAirs.nombre("Good Airs")
+			goodAirs.precio(1500)
+			goodAirs.equipaje(["Cerveza","Protector Solar"])
+			
+			
+			destinosDestacados = [garlicSea, lastToninas]
+			listaDestinos = [garlicSea,lastToninas,silversSea,goodAirs]
+			
+		}
+		
+	
+	
+	test "Los destinos mas importantes del barrilete cosmico"{
+		assert.equals(destinosDestacados, barrileteCosmico.obtenerDestinosImportantes(listaDestinos))
 	}
 	
+	test "Aplicar 25% de descuento a Last Toninas"{
+		lastToninas.aplicarDescuento(0.25)
+		assert.equals(2625,lastToninas.precio())
+	}
+	
+	// che aca el test falla porque en el tp dice que da $1125,
+	// lo que es imposible porque 3500* ( 1- 0.25) = 2625
+	
+	
 }
-// test
