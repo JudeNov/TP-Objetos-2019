@@ -5,13 +5,12 @@ import barrileteCosmico.*
 describe "Barrilete Cósmico" {
 	
 		var destinosDestacados
-		var listaDestinos
 		var garlicSea
 		var lastToninas
 		var silversSea
 		var goodAirs
 		
-		fixture{
+		fixture {
 			
 			garlicSea = new Destino()
 			garlicSea.nombre("Garlic´s Sea")
@@ -35,23 +34,39 @@ describe "Barrilete Cósmico" {
 			
 			
 			destinosDestacados = [garlicSea, lastToninas]
-			listaDestinos = [garlicSea,lastToninas,silversSea,goodAirs]
+			barrileteCosmico.destinos([garlicSea,lastToninas,silversSea,goodAirs]) 
 			
 		}
-		
+	
 	
 	
 	test "Los destinos mas importantes del barrilete cosmico"{
-		assert.equals(destinosDestacados, barrileteCosmico.obtenerDestinosImportantes(listaDestinos))
+		assert.equals(destinosDestacados, barrileteCosmico.obtenerDestinosDestacados())
 	}
 	
-	test "Aplicar 25% de descuento a Last Toninas"{
-		lastToninas.aplicarDescuento(0.25)
+	test "Aplicar 25% de descuento a Last Toninas y obtener un precio de ..."{
+		lastToninas.aplicarDescuento(25)
 		assert.equals(2625,lastToninas.precio())
 	}
-	
 	// che aca el test falla porque en el tp dice que da $1125,
-	// lo que es imposible porque 3500* ( 1- 0.25) = 2625
+	// lo que es imposible porque 3500* ( 1- 0.25) = 2625 (Guido)
 	
+	
+	test "Aplicar 25% de descuento a Last Toninas y adquirir el certificado de descuento"{
+		lastToninas.aplicarDescuento(25)
+		assert.that(lastToninas.requiereEnElEquipaje("Certificado de Descuento"))
+	}
+	
+	test "Silver's Sea no es un destino peligroso"{
+		
+	}
+	
+	test "Aplicando un descuento del 15% a todos los destinos de Barrilete Cosmico se obtienen los precios descontados"{
+		
+	}
+	
+	test "Aplicando un descuento del 15% a todos los destinos de Barrilete Cosmico todos obtienen el certificado"{
+		
+	}	
 	
 }
