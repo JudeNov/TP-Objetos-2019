@@ -8,7 +8,7 @@ Podrán encontrar el enunciado del TP haciendo click [acá](https://docs.google.
 | Apellido           | Nombre             | Legajo         | Usuario de GIT |
 |:------------------:|:------------------:|:--------------:|:--------------:|
 | Enrique            | Guido              | 164.272-8      | guidoenr4   |
-| Apellido2          | Nombre2            | 222.222-2      | username2      |
+| Prado Walsh        | Julieta            | 168.016-0      | JudeNov     |
 | Apellido3          | Nombre3            | 333.333-3      | username3      |
 | Apellido4          | Nombre4            | 444.444-4      | username4      |
 
