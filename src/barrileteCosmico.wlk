@@ -1,7 +1,7 @@
 class Destino {
-	var property nombre
+	var property nombre // es necesario tanto el getter
 	var property precio
-	var property equipaje
+	var property equipaje // creo que equipaje tampoco iria como property, no se que opinan ustedes (marti)
 	
 	//Habría que volver a revisar al final si es necesario poner el property
 	//en todas las variables o no. (Juli)
@@ -12,21 +12,29 @@ class Destino {
 	
 	method aplicarDescuento(porcentajeADescontar) {
 		precio -= (porcentajeADescontar * precio) / 100 
-		equipaje.add("Certificado de Descuento")
+		equipaje.add("Certificado de descuento")
 	}	
 	
 	method requiereLlevarVacuna() {
-		return self.requiereEnElEquipaje("Vacuna Gripal") or 
-		self.requiereEnElEquipaje("Vacuna B")
+		return self.poseeEnElEquipaje("Vacuna Gripal") or 
+		self.poseeEnElEquipaje("Vacuna B")
 	} 
 	
-	method requiereEnElEquipaje(unElemento){
+	method poseeEnElEquipaje(unElemento){
 		return equipaje.contains(unElemento)
 	}
 	//Se me ocurrio para que sea más genérico el hecho de verificar que en el string aparezca
 	//la palabra vacuna nada más, pero no se de que tanto serviría o quedaría mejor
-	//en este caso...(Juli)
+	//en este caso...(Juli) -- para mi asi esta bien, en el caso de que en otro momento se hable de mas
+	// tipos de vacunas es una buena idea para modificar ese metodo (marti)
 	
+	method nombre(){ // creo que el nombre no necesita ser property porque no usamos ningun setter (marti)
+		return nombre
+	}
+	
+	 method esPeligroso(){
+        return nombre == "Last Toninas"
+    }
 }
 
 object barrileteCosmico {
@@ -48,27 +56,41 @@ object barrileteCosmico {
 		any{ destino => destino.requiereLlevarVacuna() }
 	}
 		
-	method conocerCartaDestinos() {
+	method conocerCartaDeDestinos() {
 		return destinos.map{ destino => destino.nombre() }
 	}		
 	
+	method preciosDeLosDestinos() {
+        return destinos.map{ destino => destino.precio() }
+    }
+    
+    method todosLosDestinosPoseen(unItem){
+    	return destinos.all{destino => destino.poseeEnElEquipaje(unItem)}
+    }
+    
+    method obtenerDestinosPeligrosos(){
+    	return destinos.filter{destino => destino.esPeligroso()}
+    }
 }
 //tengo una duda muy grande sobre la Class destino,
 //osea, el enunciaod esta todo el tiempo hablando de una
 //"lista de destinos" supongo que esa lista se armara en los tests
 //y ahi si hacer que todo esto compile.. o capaz lo estoy pensando mal
 //pero pense hacer una Class destino simplemente porque todos los destinos
-//comparten los mismos atributos y los mismos methods (Guido)
+//comparten los mismos atributos y los mismos methods (Guido) ----- para mi asi esta joya (marti) 
 
 //Por ahora modelo al usuario como clase, pero si les parece que es un objeto
-//cambien nomas. (Juli)
+//cambien nomas. (Juli) ------ lo pense tambien como clase porque habla de que puede haber mas de uno,
+// y supongo que al ser todos usuarios todos comparten metodos (marti)
 
 class Usuario {
 	
-	var nombreDeUsuario
-	var lugaresQueConoce
-	var dineroEnCuenta
-	var usuariosQueSigue
+	var property nombreDeUsuario
+	var property lugaresQueConoce
+	var property dineroEnCuenta
+	var property usuariosQueSigue
+	
+	// puse todos con property para probar los tests, falta chequear cual es necesario que lo tenga y cual no
 	
 	method volarADestino(unDestino) {
 		if(self.puedeViajarA(unDestino)){
@@ -86,7 +108,7 @@ class Usuario {
 	}
 	
 	method precioTotalDeLosLugaresVisitados() {
-		return lugaresQueConoce.sum{ destino => destino.precio() }
+		return lugaresQueConoce.sum{destino => destino.precio()}
 	}
 	
 	method seguirAUsuario(otroUsuario) {
@@ -98,13 +120,5 @@ class Usuario {
 		usuariosQueSigue.add(usuario)
 	}
 	
-	//Me genera muchas dudas el método seguirAUsuario :/ (Juli)
-	
-	
-}
-
-
-
-
-
+	//Me genera muchas dudas el método seguirAUsuario :/ (Juli)	
 }
