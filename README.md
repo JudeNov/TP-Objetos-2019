@@ -1,4 +1,4 @@
-# TP Objetos 2019
+﻿# TP Objetos 2019
 
 Podrán encontrar el enunciado del TP haciendo click [acá](https://docs.google.com/document/d/1RopwL1TheW-G64PcTc2yzwk_7kWnm_FrxusCYAK7ROs/edit?usp=sharing). El enunciado se irá completando a medida que se liberen las entregas correspondientes.
 
@@ -10,7 +10,7 @@ Podrán encontrar el enunciado del TP haciendo click [acá](https://docs.google.
 | Enrique            | Guido              | 164.272-8      | guidoenr4   |
 | Prado Walsh        | Julieta            | 168.016-0      | JudeNov     |
 | Rolon Tazbaz       | Martina            | 168.537-5      | Martirolon  |
-| Apellido4          | Nombre4            | 444.444-4      | username4   |
+| Perez Peña         | Diego              | 168.122-9      | dprez8      |
 
 ## ¡Ya lo cloné! y ahora ¿cómo lo importo desde `Wollok`?
 
