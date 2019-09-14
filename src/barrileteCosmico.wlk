@@ -107,6 +107,10 @@ class Usuario {
 	method viajoA(unLugar){
         return lugaresQueConoce.contains(unLugar)
     } //Es un método que se usa para ayudar en uno de los tests.(Juli)
+    
+    // a esto de aca fede, fue lo que te pregunte que no nos entendimos nada en slack
+    // se puede hacer un method en el .wlk que solamente sirva para facilitar el uso de los tests? 
+    // porque fijate que viajoA no es un method que el objeto use por lo menos en los puntos del tp (Guido)
 	
 	method obtenerKilometros() {
 		return 0.1 * (self.precioTotalDeLosLugaresVisitados())
