@@ -1,7 +1,5 @@
 import barrileteCosmico.*
 
-
-
 describe "Barrilete Cósmico" {
 	
 		var destinosDestacados
@@ -38,7 +36,7 @@ describe "Barrilete Cósmico" {
 			
 			pabloHari = new Usuario()
 			pabloHari.nombreDeUsuario("PHari")
-			pabloHari.lugaresQueConoce(["Last Toninas", "Good Airs"])
+			pabloHari.lugaresQueConoce([lastToninas, goodAirs])
 			pabloHari.dineroEnCuenta(1500)
 			pabloHari.usuariosQueSigue([]) 
 			
@@ -50,14 +48,15 @@ describe "Barrilete Cósmico" {
 		assert.equals(destinosDestacados, barrileteCosmico.obtenerDestinosDestacados())
 	}
 	
-	test "Aplicar 25% de descuento a Last Toninas y obtener un precio de ..."{
+	test "Aplicar 25% de descuento a Last Toninas y obtener un precio de 2625"{
 		lastToninas.aplicarDescuento(25)
 		assert.equals(2625,lastToninas.precio())
 	}
-	// che aca el test falla porque en el tp dice que da $1125,
-	// lo que es imposible porque 3500* ( 1- 0.25) = 2625 (Guido)
-	
-	
+	/*Aca el test falla porque en el tp dice que da $1125,
+	lo que es imposible porque 3500* ( 1- 0.25) = 2625 (Guido)
+	Creo que está mal el numero del enunciado, los tests están hechos 
+	en este caso para respetar el precio de $3500.*/
+		
 	test "Aplicar 25% de descuento a Last Toninas y adquirir el certificado de descuento"{
 		lastToninas.aplicarDescuento(25)
 		assert.that(lastToninas.poseeEnElEquipaje("Certificado de descuento"))
@@ -65,7 +64,6 @@ describe "Barrilete Cósmico" {
 	
 	test "Silver's Sea no es un destino peligroso"{
 		assert.notThat(silversSea.esPeligroso())
-		
 	}
 	
 	test "Aplicando un descuento del 15% a todos los destinos de Barrilete Cosmico se obtienen los precios descontados"{
@@ -73,8 +71,9 @@ describe "Barrilete Cósmico" {
 		barrileteCosmico.aplicarDescuentosADestinos(15)
 		assert.equals(preciosDeDestinosConDescuento, barrileteCosmico.preciosDeLosDestinos())
 		}
-// last Toninas deberia dar 1275 pero el test me falla con ese valor, modifique el numero en el test para ver si asi funcionaba
-// no se si es error mio o error de calculo en el enunciado (marti)
+/*last Toninas deberia dar 1275 pero el test me falla con ese valor,
+modifique el numero en el test para ver si asi funcionaba
+no se si es error mio o error de calculo en el enunciado (marti)*/
 	
 	test "Aplicando un descuento del 15% a todos los destinos de Barrilete Cosmico todos obtienen el certificado"{
 		barrileteCosmico.aplicarDescuentosADestinos(15)
@@ -102,8 +101,13 @@ describe "Barrilete Cósmico" {
 	}
 	
 	test "PHari puede volar a Silver´s Sea"{
-		assert.that(pabloHari.volarADestino(silversSea))
+		assert.that(pabloHari.puedeViajarA(silversSea))
 	}
+	
+	test "PHari realiza un viaje a Silver 's Sea y agrega el lugar a su historial"{
+        pabloHari.volarADestino(silversSea)
+        assert.that(pabloHari.viajoA(silversSea))
+    }
 	
 	test "PHari posee $150 en su cuenta luego de volar a Silver´s Sea"{
 		pabloHari.volarADestino(silversSea)
