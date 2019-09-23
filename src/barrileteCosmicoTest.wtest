@@ -44,47 +44,40 @@ describe "Barrilete Cósmico" {
 	
 	
 	
-	test "Los destinos mas importantes del barrilete cosmico"{
+	test "Los destinos mas importantes del barrilete cosmico son Garlic´s Sea y Last Toninas."{
 		assert.equals(destinosDestacados, barrileteCosmico.obtenerDestinosDestacados())
 	}
 	
-	test "Aplicar 25% de descuento a Last Toninas y obtener un precio de 2625"{
+	test "Aplicar 25% de descuento a Last Toninas y obtener un precio de 2625."{
 		lastToninas.aplicarDescuento(25)
-		assert.equals(2625,lastToninas.precio())
+		assert.equals(2625, lastToninas.precio())
 	}
-	/*Aca el test falla porque en el tp dice que da $1125,
-	lo que es imposible porque 3500* ( 1- 0.25) = 2625 (Guido)
-	Creo que está mal el numero del enunciado, los tests están hechos 
-	en este caso para respetar el precio de $3500.*/
-		
-	test "Aplicar 25% de descuento a Last Toninas y adquirir el certificado de descuento"{
+			
+	test "Aplicar 25% de descuento a Last Toninas y adquirir el certificado de descuento."{
 		lastToninas.aplicarDescuento(25)
 		assert.that(lastToninas.poseeEnElEquipaje("Certificado de descuento"))
 	}
 	
-	test "Silver's Sea no es un destino peligroso"{
+	test "Silver's Sea no es un destino peligroso."{
 		assert.notThat(silversSea.esPeligroso())
 	}
 	
-	test "Aplicando un descuento del 15% a todos los destinos de Barrilete Cosmico se obtienen los precios descontados"{
-		var preciosDeDestinosConDescuento = [2125,1147.5,2975,1275]
+	test "Aplicando un descuento del 15% a todos los destinos de Barrilete Cosmico se obtienen los precios descontados."{
+		var preciosDeDestinosConDescuento = [2125, 1147.5, 2975, 1275]
 		barrileteCosmico.aplicarDescuentosADestinos(15)
 		assert.equals(preciosDeDestinosConDescuento, barrileteCosmico.preciosDeLosDestinos())
 		}
-/*last Toninas deberia dar 1275 pero el test me falla con ese valor,
-modifique el numero en el test para ver si asi funcionaba
-no se si es error mio o error de calculo en el enunciado (marti)*/
 	
-	test "Aplicando un descuento del 15% a todos los destinos de Barrilete Cosmico todos obtienen el certificado"{
+	test "Aplicando un descuento del 15% a todos los destinos de Barrilete Cosmico todos obtienen el certificado."{
 		barrileteCosmico.aplicarDescuentosADestinos(15)
 		assert.that(barrileteCosmico.todosLosDestinosPoseen("Certificado de descuento"))
 	}
 	
-	test "El destino mas peligroso es Last Toninas"{
-		  assert.equals([lastToninas], barrileteCosmico.obtenerDestinosPeligrosos())
+	test "El destino mas peligroso es Last Toninas."{
+		  assert.equals([lastToninas], barrileteCosmico.destinosPeligrosos())
 	}
 	
-	test "Barrilete Cosmico es empresa extrema"{
+	test "Barrilete Cosmico es empresa extrema."{
 		assert.that(barrileteCosmico.esEmpresaExtrema())
 	}
 	
@@ -93,23 +86,25 @@ no se si es error mio o error de calculo en el enunciado (marti)*/
 		assert.equals(cartaDeDestinos, barrileteCosmico.conocerCartaDeDestinos())
 	}
 	
-	// "PHari posee 500 kilometros de millas" y "PHari puede volar a Silver´s Sea" me fallan y wollok me marca que es por error de tipos,
-	// no se si sera ese realmente el error o estoy metiendo yo la pata en algun lado (marti)
-	
-	test "PHari posee 500 kilometros de millas"{
+	test "Las millas del usuario PHari son 500."{
 		assert.equals(500, pabloHari.obtenerKilometros())
 	}
 	
-	test "PHari puede volar a Silver´s Sea"{
+	test "PHari puede volar a Silver´s Sea."{
 		assert.that(pabloHari.puedeViajarA(silversSea))
 	}
 	
-	test "PHari realiza un viaje a Silver 's Sea y agrega el lugar a su historial"{
+	test "PHari no puede volar a Silver's Sea." {
+		pabloHari.descontarDeLaCuenta(1000)
+		assert.throwsExceptionWithMessage("No se puede viajar al destino.", { pabloHari.puedeViajarA(silversSea) })
+	}
+	
+	test "PHari realiza un viaje a Silver 's Sea y agrega el lugar a su historial."{
         pabloHari.volarADestino(silversSea)
         assert.that(pabloHari.viajoA(silversSea))
     }
 	
-	test "PHari posee $150 en su cuenta luego de volar a Silver´s Sea"{
+	test "PHari posee $150 en su cuenta luego de volar a Silver´s Sea."{
 		pabloHari.volarADestino(silversSea)
 		assert.equals(150, pabloHari.dineroEnCuenta())
 	}
