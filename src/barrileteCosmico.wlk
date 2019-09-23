@@ -1,16 +1,23 @@
 class Destino {
 	var property nombre 
-	var property precio
+	var property precioOriginal
 	var property equipaje 
+	var descuentos = [] 
+	// los descuentos que se necesiten son instancias de la nueva clase descuentos
 	
 	method esDestacado() {
-		return precio > 2000
-	}
+		return precioOriginal > 2000
+	} //creo que el precio a comparar el el que esta sin descuentos, pero tengo dudas
 	
-	method aplicarDescuento(porcentajeADescontar) {
-		precio -= (porcentajeADescontar * precio) / 100 
+	method aplicarDescuento(unDescuento) {
+		descuentos.add(unDescuento) 
 		equipaje.add("Certificado de descuento")
-	}	
+	} // donde unDescuento es una instancia de la clase descuento
+	
+	method precio(){
+		return precioOriginal - descuentos.sum{ descuento => 
+			descuento.calcularDescuento(precioOriginal) } 
+	}
 	
 	method requiereLlevarVacuna() {
 		return self.poseeEnElEquipaje("Vacuna Gripal") or 
@@ -24,6 +31,7 @@ class Destino {
 	 method esPeligroso(){
         return self.requiereLlevarVacuna()
     }
+ 
         
 }
 
@@ -115,6 +123,14 @@ class Usuario {
 	
 }
 
+class Descuento {
+	var porcentaje 
+	//el porcentaje es indicado como un numero decimal, por ejemplo 10% es 0.1
+
+	method calcularDescuento(unTotal) {
+		return unTotal * porcentaje
+	}
+}
 class ViajeException inherits Exception {
 	
 }
