@@ -1,3 +1,15 @@
+object vacunasRegistradas{
+	var vacunas = ["Vacuna Gripal", "Vacuna B"]
+	
+	method nuevaVacuna(tipoVacuna){
+		vacunas.add(tipoVacuna)
+	}
+	
+	method listaVacunas(){
+		return vacunas()
+	}
+}
+
 class Destino {
 	var property nombre 
 	var precioOriginal
@@ -19,10 +31,9 @@ class Destino {
 	}
 	
 	method requiereLlevarVacuna() {
-		var vacunas = ["Vacuna Gripal", "Vacuna B"]
-		return vacunas.any{ unElemento => self.poseeEnElEquipaje(unElemento) }
+		return vacunasRegistradas.listaVacunas().any{ unElemento => self.poseeEnElEquipaje(unElemento) }
 	} 
-	
+
 	method poseeEnElEquipaje(unElemento){
 		return equipaje.contains(unElemento)
 	}
@@ -30,7 +41,7 @@ class Destino {
 	 method esPeligroso(){
         return self.requiereLlevarVacuna()
     }
-   
+    
 }
 
 object barrileteCosmico {
