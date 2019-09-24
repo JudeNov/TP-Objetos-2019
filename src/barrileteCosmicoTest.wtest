@@ -8,38 +8,47 @@ describe "Barrilete Cósmico" {
 		var silversSea
 		var goodAirs
 		var pabloHari
+		var veinticincoPorciento
+		var quincePorciento
 		
 		fixture { 
 			
-			garlicSea = new Destino()
-			garlicSea.nombre("Garlic´s Sea")
-			garlicSea.precio(2500)
-			garlicSea.equipaje(["Caña de Pescar", "Piloto"])
+			garlicSea = new Destino(
+				nombre = "Garlic´s Sea",
+				precioOriginal = 2500,
+				equipaje = ["Caña de Pescar", "Piloto"]
+			)
 			
-			silversSea = new Destino()
-			silversSea.nombre("Silver's Sea")
-			silversSea.precio(1350)
-			silversSea.equipaje(["Protector Solar","Equipo de Buceo"])
+			silversSea = new Destino(
+				nombre = "Silver's Sea",
+				precioOriginal = 1350,
+				equipaje = ["Protector Solar","Equipo de Buceo"]		
+			)
 			
-			lastToninas = new Destino()
-			lastToninas.nombre("Last Toninas")
-			lastToninas.precio(3500)
-			lastToninas.equipaje(["Vacuna Gripal","Vacuna B","Necronomicon"])
+			lastToninas = new Destino(
+				nombre = "Last Toninas",
+				precioOriginal = 3500,
+				equipaje = ["Vacuna Gripal","Vacuna B","Necronomicon"]					
+			)
 			
-			goodAirs= new Destino()
-			goodAirs.nombre("Good Airs")
-			goodAirs.precio(1500)
-			goodAirs.equipaje(["Cerveza","Protector Solar"])
-			
+			goodAirs= new Destino(
+				nombre = "Good Airs",
+				precioOriginal = 1500,
+				equipaje = ["Cerveza","Protector Solar"]	
+			)
+				
 			destinosDestacados = [garlicSea, lastToninas]
 			barrileteCosmico.destinos([garlicSea,silversSea,lastToninas,goodAirs])
 			
-			pabloHari = new Usuario()
-			pabloHari.nombreDeUsuario("PHari")
-			pabloHari.lugaresQueConoce([lastToninas, goodAirs])
-			pabloHari.dineroEnCuenta(1500)
-			pabloHari.usuariosQueSigue([]) 
+			pabloHari = new Usuario(
+				nombreDeUsuario = "PHari",
+				lugaresQueConoce = [lastToninas, goodAirs],
+				dineroEnCuenta = 1500,
+				usuariosQueSigue = []
+			) 
 			
+			veinticincoPorciento = new Descuento(porcentaje = 0.25)
+			quincePorciento = new Descuento (porcentaje = 0.15)
 		}
 	
 	
@@ -49,12 +58,12 @@ describe "Barrilete Cósmico" {
 	}
 	
 	test "Aplicar 25% de descuento a Last Toninas y obtener un precio de 2625."{
-		lastToninas.aplicarDescuento(25)
+		lastToninas.aplicarDescuento(veinticincoPorciento)
 		assert.equals(2625, lastToninas.precio())
 	}
 			
 	test "Aplicar 25% de descuento a Last Toninas y adquirir el certificado de descuento."{
-		lastToninas.aplicarDescuento(25)
+		lastToninas.aplicarDescuento(veinticincoPorciento)
 		assert.that(lastToninas.poseeEnElEquipaje("Certificado de descuento"))
 	}
 	
@@ -64,12 +73,12 @@ describe "Barrilete Cósmico" {
 	
 	test "Aplicando un descuento del 15% a todos los destinos de Barrilete Cosmico se obtienen los precios descontados."{
 		var preciosDeDestinosConDescuento = [2125, 1147.5, 2975, 1275]
-		barrileteCosmico.aplicarDescuentosADestinos(15)
+		barrileteCosmico.aplicarDescuentosADestinos(quincePorciento)
 		assert.equals(preciosDeDestinosConDescuento, barrileteCosmico.preciosDeLosDestinos())
 		}
 	
 	test "Aplicando un descuento del 15% a todos los destinos de Barrilete Cosmico todos obtienen el certificado."{
-		barrileteCosmico.aplicarDescuentosADestinos(15)
+		barrileteCosmico.aplicarDescuentosADestinos(quincePorciento)
 		assert.that(barrileteCosmico.todosLosDestinosPoseen("Certificado de descuento"))
 	}
 	
