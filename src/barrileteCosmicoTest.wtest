@@ -8,8 +8,8 @@ describe "Barrilete Cósmico" {
 		var silversSea
 		var goodAirs
 		var pabloHari
-		var veinticincoPorciento
-		var quincePorciento
+		var descuentoVeinticincoPorciento
+		var descuentoQuincePorciento
 		
 		fixture { 
 			
@@ -47,8 +47,8 @@ describe "Barrilete Cósmico" {
 				usuariosQueSigue = []
 			) 
 			
-			veinticincoPorciento = new Descuento(porcentaje = 0.25)
-			quincePorciento = new Descuento (porcentaje = 0.15)
+			descuentoVeinticincoPorciento = new Descuento(porcentaje = 0.25)
+			descuentoQuincePorciento = new Descuento (porcentaje = 0.15)
 		}
 	
 	
@@ -58,12 +58,12 @@ describe "Barrilete Cósmico" {
 	}
 	
 	test "Aplicar 25% de descuento a Last Toninas y obtener un precio de 2625."{
-		lastToninas.aplicarDescuento(veinticincoPorciento)
+		lastToninas.aplicarDescuento(descuentoVeinticincoPorciento)
 		assert.equals(2625, lastToninas.precio())
 	}
 			
 	test "Aplicar 25% de descuento a Last Toninas y adquirir el certificado de descuento."{
-		lastToninas.aplicarDescuento(veinticincoPorciento)
+		lastToninas.aplicarDescuento(descuentoVeinticincoPorciento)
 		assert.that(lastToninas.poseeEnElEquipaje("Certificado de descuento"))
 	}
 	
@@ -73,12 +73,12 @@ describe "Barrilete Cósmico" {
 	
 	test "Aplicando un descuento del 15% a todos los destinos de Barrilete Cosmico se obtienen los precios descontados."{
 		var preciosDeDestinosConDescuento = [2125, 1147.5, 2975, 1275]
-		barrileteCosmico.aplicarDescuentosADestinos(quincePorciento)
+		barrileteCosmico.aplicarDescuentosADestinos(descuentoQuincePorciento)
 		assert.equals(preciosDeDestinosConDescuento, barrileteCosmico.preciosDeLosDestinos())
 		}
 	
 	test "Aplicando un descuento del 15% a todos los destinos de Barrilete Cosmico todos obtienen el certificado."{
-		barrileteCosmico.aplicarDescuentosADestinos(quincePorciento)
+		barrileteCosmico.aplicarDescuentosADestinos(descuentoQuincePorciento)
 		assert.that(barrileteCosmico.todosLosDestinosPoseen("Certificado de descuento"))
 	}
 	
@@ -90,12 +90,12 @@ describe "Barrilete Cósmico" {
 		assert.that(barrileteCosmico.esEmpresaExtrema())
 	}
 	
-	test "La carta de destinos de Barrilete Cosmico es Last Toninas, Garlic´s sea, Good Airs y Silver's Sea"{
+	test "La carta de destinos de Barrilete Cosmico es Last Toninas, Garlic´s sea, Good Airs y Silver's Sea."{
 		var cartaDeDestinos = ["Garlic´s Sea","Silver's Sea","Last Toninas","Good Airs"]
 		assert.equals(cartaDeDestinos, barrileteCosmico.conocerCartaDeDestinos())
 	}
 	
-	test "Las millas del usuario PHari son 500."{
+	test "Los kilometros del usuario PHari son 500."{
 		assert.equals(500, pabloHari.obtenerKilometros())
 	}
 	
@@ -104,8 +104,8 @@ describe "Barrilete Cósmico" {
 	}
 	
 	test "PHari no puede volar a Silver's Sea." {
-		pabloHari.descontarDeLaCuenta(1000)
-		assert.throwsExceptionWithMessage("No se puede viajar al destino.", { pabloHari.puedeViajarA(silversSea) })
+		pabloHari.descontarDeLaCuenta(1250)
+		assert.throwsExceptionWithMessage("No se puede viajar al destino.", { pabloHari.volarADestino(silversSea) })
 	}
 	
 	test "PHari realiza un viaje a Silver 's Sea y agrega el lugar a su historial."{

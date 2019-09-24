@@ -1,13 +1,12 @@
 class Destino {
 	var property nombre 
-	var property precioOriginal
-	var property equipaje 
+	var precioOriginal
+	var equipaje 
 	var descuentos = [] 
-	// los descuentos que se necesiten son instancias de la nueva clase descuentos
-	
+			
 	method esDestacado() {
 		return precioOriginal > 2000
-	} //creo que el precio a comparar el el que esta sin descuentos, pero tengo dudas
+	}
 	
 	method aplicarDescuento(unDescuento) {
 		descuentos.add(unDescuento) 
@@ -20,8 +19,8 @@ class Destino {
 	}
 	
 	method requiereLlevarVacuna() {
-		return self.poseeEnElEquipaje("Vacuna Gripal") or 
-		self.poseeEnElEquipaje("Vacuna B")
+		var vacunas = ["Vacuna Gripal", "Vacuna B"]
+		return vacunas.any{ unElemento => self.poseeEnElEquipaje(unElemento) }
 	} 
 	
 	method poseeEnElEquipaje(unElemento){
@@ -31,12 +30,10 @@ class Destino {
 	 method esPeligroso(){
         return self.requiereLlevarVacuna()
     }
- 
-        
+   
 }
 
 object barrileteCosmico {
-	
 	var property destinos = []
 	
 	method obtenerDestinosDestacados() {
@@ -73,12 +70,10 @@ object barrileteCosmico {
 
 class Usuario {
 	
-	var property nombreDeUsuario
-	var property lugaresQueConoce
+	var nombreDeUsuario
+	var lugaresQueConoce
+	var usuariosQueSigue
 	var property dineroEnCuenta
-	var property usuariosQueSigue
-	
-	// puse todos con property para probar los tests, falta chequear cual es necesario que lo tenga y cual no
 	
 	method volarADestino(unDestino) {
 		if(!self.puedeViajarA(unDestino)){
@@ -98,12 +93,8 @@ class Usuario {
 	
 	method viajoA(unLugar){
         return lugaresQueConoce.contains(unLugar)
-    } //Es un método que se usa para ayudar en uno de los tests.(Juli)
+    } 
         
-    // a esto de aca fede, fue lo que te pregunte que no nos entendimos nada en slack
-    // se puede hacer un method en el .wlk que solamente sirva para facilitar el uso de los tests? 
-    // porque fijate que viajoA no es un method que el objeto use por lo menos en los puntos del tp (Guido)
-	
 	method obtenerKilometros() {
 		return 0.1 * (self.precioTotalDeLosLugaresVisitados())
 	}
