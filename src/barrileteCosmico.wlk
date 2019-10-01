@@ -14,8 +14,11 @@ class Destino {
 	} // donde unDescuento es una instancia de la clase descuento
 	
 	method precio(){
-		return precioOriginal - descuentos.sum{ descuento => 
-			descuento.calcularDescuento(precioOriginal) } 
+		return precioOriginal - self.descuentosAplicados()
+	}
+	
+	method descuentosAplicados() {
+		return descuentos.sum{ descuento => descuento.calcularDescuento(precioOriginal) } 
 	}
 	
 	method requiereLlevarVacuna() {
@@ -87,11 +90,15 @@ class Usuario {
 	var property dineroEnCuenta
 	
 	method volarADestino(unDestino) {
+		self.validarViajeA(unDestino)
+		lugaresQueConoce.add(unDestino)
+		self.descontarDeLaCuenta(unDestino.precio())	
+	}
+	
+	method validarViajeA(unDestino) {
 		if(!self.puedeViajarA(unDestino)){
 			throw new ViajeException(message = "No se puede viajar al destino.")		
 		}	
-		lugaresQueConoce.add(unDestino)
-		self.descontarDeLaCuenta(unDestino.precio())	
 	}
 	
 	method descontarDeLaCuenta(unMonto) {
