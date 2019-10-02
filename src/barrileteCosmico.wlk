@@ -1,4 +1,4 @@
-class Destino {
+/*class Destino {
 	var property nombre 
 	var precioOriginal
 	var equipaje 
@@ -33,7 +33,68 @@ class Destino {
         return self.requiereLlevarVacuna()
     }
     
+}*/
+
+class Localidad {
+	var property nombre 
+	var precioOriginal
+	var kilometro
+	var equipaje 
+	var descuentos = [] 
+	var transportes = []
+			
+	method esDestacado() {
+		return precioOriginal > 2000
+	}
+	
+	method kilometro(){
+		return kilometro
+	}
+	
+	method distanciaACiudad(ciudad){
+		var distancia = kilometro-ciudad.kilometro() 
+		return distancia.abs()
+	}
+	
+	method aplicarDescuento(unDescuento) {
+		descuentos.add(unDescuento) 
+		equipaje.add("Certificado de descuento")
+	} // donde unDescuento es una instancia de la clase descuento
+	
+	method precioViaje(transporte){
+		return precioOriginal + self.precioPorKilometros(transporte) - self.descuentosAplicados()
+	}
+	
+	method precioPorKilometros(transporte){
+		//calcular distancia hasta la otra localidad y ver el precioPorKilometro del transporte que va a usar.... verificar que ese transporte esté disponible
+	}
+	
+	
+	method descuentosAplicados() {
+		return descuentos.sum{ descuento => descuento.calcularDescuento(precioOriginal) } 
+	}
+	
+	method requiereLlevarVacuna() {
+		return vacunasRegistradas.listaVacunas().any{ unElemento => self.poseeEnElEquipaje(unElemento) }
+	} 
+
+	method poseeEnElEquipaje(unElemento){
+		return equipaje.contains(unElemento)
+	}
+		
+	 method esPeligroso(){
+        return self.requiereLlevarVacuna()
+    }
+    
 }
+
+class mediosTransporte{
+	var tiempo
+	var precioPorKilometro
+}
+
+
+
 
 object vacunasRegistradas{
 	var vacunas = ["Vacuna Gripal", "Vacuna B"]
@@ -85,6 +146,7 @@ object barrileteCosmico {
 class Usuario {
 	
 	var nombreDeUsuario
+	var localidad
 	var lugaresQueConoce
 	var usuariosQueSigue
 	var property dineroEnCuenta
@@ -92,7 +154,8 @@ class Usuario {
 	method volarADestino(unDestino) {
 		self.validarViajeA(unDestino)
 		lugaresQueConoce.add(unDestino)
-		self.descontarDeLaCuenta(unDestino.precio())	
+		self.descontarDeLaCuenta(unDestino.precio())
+		localidad = unDestino	
 	}
 	
 	method validarViajeA(unDestino) {
