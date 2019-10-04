@@ -13,25 +13,25 @@ describe "Barrilete Cósmico" {
 		
 		fixture { 
 			
-			garlicSea = new Destino(
+			garlicSea = new Localidad(
 				nombre = "Garlic´s Sea",
 				precioOriginal = 2500,
 				equipaje = ["Caña de Pescar", "Piloto"]
 			)
 			
-			silversSea = new Destino(
+			silversSea = new Localidad(
 				nombre = "Silver's Sea",
 				precioOriginal = 1350,
 				equipaje = ["Protector Solar","Equipo de Buceo"]		
 			)
 			
-			lastToninas = new Destino(
+			lastToninas = new Localidad(
 				nombre = "Last Toninas",
 				precioOriginal = 3500,
 				equipaje = ["Vacuna Gripal","Vacuna B","Necronomicon"]					
 			)
 			
-			goodAirs= new Destino(
+			goodAirs= new Localidad(
 				nombre = "Good Airs",
 				precioOriginal = 1500,
 				equipaje = ["Cerveza","Protector Solar"]	
@@ -44,7 +44,8 @@ describe "Barrilete Cósmico" {
 				nombreDeUsuario = "PHari",
 				lugaresQueConoce = [lastToninas, goodAirs],
 				dineroEnCuenta = 1500,
-				usuariosQueSigue = []
+				usuariosQueSigue = [],
+				localidad = lastToninas
 			) 
 			
 			descuentoVeinticincoPorciento = new Descuento(porcentaje = 0.25)

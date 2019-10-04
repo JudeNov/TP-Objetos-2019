@@ -38,21 +38,16 @@
 class Localidad {
 	var property nombre 
 	var precioOriginal
-	var kilometro
 	var equipaje 
 	var descuentos = [] 
-	var transportes = []
-			
+	const kilometroDeLocalidad
+				
 	method esDestacado() {
 			return precioOriginal > 2000
 	}
 	
-	method kilometro() {
-			return kilometro
-	}
-	
-	method distanciaACiudad(ciudad) {
-			var distancia = kilometro - ciudad.kilometro() 
+	method distanciaALocalidad(otraLocalidad) {
+			var distancia = kilometroDeLocalidad - otraLocalidad.kilometroDeLocalidad() 
 			return distancia.abs()
 	}
 	
@@ -60,15 +55,6 @@ class Localidad {
 			descuentos.add(unDescuento) 
 			equipaje.add("Certificado de descuento")
 	} // donde unDescuento es una instancia de la clase descuento
-	
-	method precioViaje(transporte) {
-			return precioOriginal + self.precioPorKilometros(transporte) - self.descuentosAplicados()
-	}
-	
-	method precioPorKilometros(transporte) {
-		//calcular distancia hasta la otra localidad y ver el precioPorKilometro del transporte que va a usar.... verificar que ese transporte esté disponible
-	}
-	
 	
 	method descuentosAplicados() {
 			return descuentos.sum { descuento => descuento.calcularDescuento(precioOriginal) } 
@@ -85,11 +71,33 @@ class Localidad {
 	method esPeligroso() {
         	return self.requiereLlevarVacuna()
     }
+    
+    method kilometroDeLocalidad() = kilometroDeLocalidad
 }
 
-class mediosTransporte {
-	var tiempo
+class Viaje {
+	var property localidadOrigen
+	var property localidadDestino
+	var property transporte
+	
+	method precioDeViaje() {
+			return localidadDestino.precio() + transporte.precioDeTransporteEntre(localidadOrigen, localidadDestino) 
+	}
+
+	method distanciaRecorrida() {
+			return localidadOrigen.distanciaA(localidadDestino)
+	}
+	
+}
+
+class Transporte {
+	var horasDeViaje
 	var precioPorKilometro
+	
+	method precioDeTransporteEntre(localidadDeOrigen, localidadDeDestino) {
+			var kilometrosDeViaje = localidadDeOrigen.distanciaA(localidadDeDestino)
+			return precioPorKilometro * kilometrosDeViaje
+	}
 }
 
 object vacunasRegistradas {
