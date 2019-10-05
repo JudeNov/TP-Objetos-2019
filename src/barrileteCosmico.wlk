@@ -46,7 +46,7 @@ class Localidad {
 			return precioOriginal > 2000
 	}
 	
-	method distanciaALocalidad(otraLocalidad) {
+	method distanciaA(otraLocalidad) {
 			var distancia = kilometroDeLocalidad - otraLocalidad.kilometroDeLocalidad() 
 			return distancia.abs()
 	}
@@ -61,10 +61,11 @@ class Localidad {
 	}
 	
 	method requiereLlevarVacuna() {
-			return vacunasRegistradas.vacunas().any { unElemento => self.poseeEnElEquipaje(unElemento) }
+			return vacunasRegistradas.vacunas().any { unElemento => 
+				self.requiereEnEquipaje(unElemento)}
 	} 
 
-	method poseeEnElEquipaje(unElemento) {
+	method requiereEnEquipaje(unElemento) {
 			return equipaje.contains(unElemento)
 	}
 		
@@ -81,14 +82,33 @@ class Viaje {
 	var property transporte
 	
 	method precioDeViaje() {
-			return localidadDestino.precio() + transporte.precioDeTransporteEntre(localidadOrigen, localidadDestino) 
+			return localidadDestino.precio() + 
+			transporte.precioDeTransporteEntre(localidadOrigen, localidadDestino) 
 	}
 
 	method distanciaRecorrida() {
 			return localidadOrigen.distanciaA(localidadDestino)
 	}
 	
+	method localidadDestinoEsPeligrosa(){
+		return localidadDestino.esPeligrosa()
+	}
+
+	
+	method localidadDestinoEsDestacada(){
+		return localidadDestino.esDestacada()
+	}
+	
+	method distanciaRecorrida(){
+		return localidadDestino.distanciaA(localidadOrigen)
+	}
+	
+	method requiereLlevar(unItem){
+		return localidadDestino.poseeEnElEquipaje(unItem)
+	}
 }
+
+// faltan definir estos metodos que se usan en barrilete cosmico, los deje asi para no olvidarme (marti)
 
 class Transporte {
 	var horasDeViaje
@@ -98,7 +118,7 @@ class Transporte {
 			var kilometrosDeViaje = localidadDeOrigen.distanciaA(localidadDeDestino)
 			return precioPorKilometro * kilometrosDeViaje
 	}
-}
+} 
 
 object vacunasRegistradas {
 	var property vacunas = ["Vacuna Gripal", "Vacuna B"]
@@ -109,34 +129,36 @@ object vacunasRegistradas {
 }
 
 object barrileteCosmico {
-	var property destinos = []
+	var property viajes = []
+	var transportes = [] // quizas conviene que sea un set (marti)
 	
-	method obtenerDestinosDestacados() {
-			return destinos.filter { destino => destino.esDestacado() }
+	method obtenerViajesDestacados() {
+			return viajes.filter { unViaje => unViaje.localidadDestinoEsDestacada()}
 	}
 	
 	method aplicarDescuentosADestinos(unDescuento) {
-			destinos.forEach { destino => destino.aplicarDescuento(unDescuento) }
+			viajes.forEach { unViaje => unViaje.aplicarDescuento(unDescuento) }
 	}
 	
 	method esEmpresaExtrema() {
-			return (self.obtenerDestinosDestacados()).any { destino => destino.esPeligroso() }
+			return (self.obtenerViajesDestacados()).any { unViaje => 
+				unViaje.localidadDestinoEsPeligrosa()}
 	}
 		
-	method conocerCartaDeDestinos() {
-			return destinos.map { destino => destino.nombre() }
+	method conocerCartaDeViajes() {
+			return viajes.map { unViaje => unViaje.localidadDestino() }
 	}		
 	
-	method preciosDeLosDestinos() {
-        	return destinos.map { destino => destino.precio() }
+	method preciosDeLosViajes() {
+        	return viajes.map { unViaje => unViaje.precioDelViaje() }
     }
     
-    method todosLosDestinosPoseen(unItem) {
-    		return destinos.all { destino => destino.poseeEnElEquipaje(unItem) }
+    method todosLosViajesPoseen(unItem) {
+    		return viajes.all { unViaje => unViaje.requiereLLevar(unItem) }
     }
     
-    method destinosPeligrosos() {
-    		return destinos.filter { destino => destino.esPeligroso() }
+    method viajesConDestinosPeligrosos() {
+    		return viajes.filter { unViaje => unViaje.localidadDestinoEsPeligrosa() }
     }
 }
 
