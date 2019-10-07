@@ -1,39 +1,3 @@
-/*class Destino {
-	var property nombre 
-	var precioOriginal
-	var equipaje 
-	var descuentos = [] 
-			
-	method esDestacado() {
-		return precioOriginal > 2000
-	}
-	
-	method aplicarDescuento(unDescuento) {
-		descuentos.add(unDescuento) 
-		equipaje.add("Certificado de descuento")
-	} // donde unDescuento es una instancia de la clase descuento
-	
-	method precio(){
-		return precioOriginal - self.descuentosAplicados()
-	}
-	
-	method descuentosAplicados() {
-		return descuentos.sum{ descuento => descuento.calcularDescuento(precioOriginal) } 
-	}
-	
-	method requiereLlevarVacuna() {
-		return vacunasRegistradas.listaVacunas().any{ unElemento => self.poseeEnElEquipaje(unElemento) }
-	} 
-
-	method poseeEnElEquipaje(unElemento){
-		return equipaje.contains(unElemento)
-	}
-		
-	 method esPeligroso(){
-        return self.requiereLlevarVacuna()
-    }
-    
-}*/
 
 class Localidad {
 	var property nombre 
@@ -42,13 +6,12 @@ class Localidad {
 	var descuentos = [] 
 	const kilometroDeLocalidad
 				
-	method esDestacado() {
+	method esDestacada() {
 			return precioOriginal > 2000
 	}
 	
 	method distanciaA(otraLocalidad) {
-			var distancia = kilometroDeLocalidad - otraLocalidad.kilometroDeLocalidad() 
-			return distancia.abs()
+			return (kilometroDeLocalidad - otraLocalidad.kilometroDeLocalidad()).abs() 
 	}
 	
 	method aplicarDescuento(unDescuento) {
@@ -69,11 +32,15 @@ class Localidad {
 			return equipaje.contains(unElemento)
 	}
 		
-	method esPeligroso() {
+	method esPeligrosa() {
         	return self.requiereLlevarVacuna()
     }
     
     method kilometroDeLocalidad() = kilometroDeLocalidad
+    
+    method precio(){
+    	return precioOriginal
+    }
 }
 
 class Viaje {
@@ -85,12 +52,8 @@ class Viaje {
 			return localidadDestino.precio() + 
 			transporte.precioDeTransporteEntre(localidadOrigen, localidadDestino) 
 	}
-
-	method distanciaRecorrida() {
-			return localidadOrigen.distanciaA(localidadDestino)
-	}
 	
-	method localidadDestinoEsPeligrosa(){
+	method elViajeEsPeligroso(){
 		return localidadDestino.esPeligrosa()
 	}
 
@@ -104,7 +67,11 @@ class Viaje {
 	}
 	
 	method requiereLlevar(unItem){
-		return localidadDestino.poseeEnElEquipaje(unItem)
+		return localidadDestino.requiereEnEquipaje(unItem)
+	}
+	
+	method aplicarDescuentoAlDestino(descuento){
+		localidadDestino.aplicarDescuento(descuento)
 	}
 }
 
@@ -115,8 +82,7 @@ class Transporte {
 	var precioPorKilometro
 	
 	method precioDeTransporteEntre(localidadDeOrigen, localidadDeDestino) {
-			var kilometrosDeViaje = localidadDeOrigen.distanciaA(localidadDeDestino)
-			return precioPorKilometro * kilometrosDeViaje
+			return precioPorKilometro * (localidadDeOrigen.distanciaA(localidadDeDestino))
 	}
 } 
 
@@ -137,12 +103,12 @@ object barrileteCosmico {
 	}
 	
 	method aplicarDescuentosADestinos(unDescuento) {
-			viajes.forEach { unViaje => unViaje.aplicarDescuento(unDescuento) }
+			viajes.forEach { unViaje => unViaje.aplicarDescuentoAlDestino(unDescuento) }
 	}
 	
 	method esEmpresaExtrema() {
 			return (self.obtenerViajesDestacados()).any { unViaje => 
-				unViaje.localidadDestinoEsPeligrosa()}
+				unViaje.elViajeEsPeligroso()}
 	}
 		
 	method conocerCartaDeViajes() {
@@ -150,11 +116,11 @@ object barrileteCosmico {
 	}		
 	
 	method preciosDeLosViajes() {
-        	return viajes.map { unViaje => unViaje.precioDelViaje() }
+        	return viajes.map { unViaje => unViaje.precioDeViaje() }
     }
     
     method todosLosViajesPoseen(unItem) {
-    		return viajes.all { unViaje => unViaje.requiereLLevar(unItem) }
+    		return viajes.all { unViaje => unViaje.requiereLlevar(unItem) }
     }
     
     method viajesConDestinosPeligrosos() {
@@ -164,52 +130,61 @@ object barrileteCosmico {
 
 class Usuario {
 	var nombreDeUsuario
-	var localidad
-	var lugaresQueConoce
+	var localidadOrigen
+	var viajes
 	var usuariosQueSigue
 	var property dineroEnCuenta
 	
-	method volarADestino(unDestino) {
-			self.validarViajeA(unDestino)
-			lugaresQueConoce.add(unDestino)
-			self.descontarDeLaCuenta(unDestino.precio())
-			localidad = unDestino	
+	method hacerUnViaje(viaje) {
+			self.validarViajeA(viaje)
+			viajes.add(viaje)
+			self.descontarDeLaCuenta(viaje.precioDeViaje())
+			localidadOrigen = viaje.localidadDestino()
 	}
-	
-	method validarViajeA(unDestino) {
-			if(!self.puedeViajarA(unDestino)) {
+//	
+	method validarViajeA(viaje) {
+			if(!self.puedeViajar(viaje)){
 				throw new ViajeException(message = "No se puede viajar al destino.")		
 			}	
 	}
 	
+//	
 	method descontarDeLaCuenta(unMonto) {
 			dineroEnCuenta -= unMonto
 	}
+//	
+	method puedeViajar(viaje){
+			return dineroEnCuenta >= viaje.precioDeViaje()
+	}
 	
-	method puedeViajarA(unDestino) {
-			return dineroEnCuenta >= unDestino.precio()
+	method obtenerKilometros(){
+		return viajes.sum{viaje => viaje.distanciaRecorrida()}
 	}
 	
 	method viajoA(unLugar) {
-       		return lugaresQueConoce.contains(unLugar)
-    } 
-        
-	method obtenerKilometros() {
-			return 0.1 * (self.precioTotalDeLosLugaresVisitados())
-	}
-	
-	method precioTotalDeLosLugaresVisitados() {
-			return lugaresQueConoce.sum { destino => destino.precio() }
-	}
-	
-	method seguirAUsuario(otroUsuario) {
-			otroUsuario.agregarSeguido(self)
-			self.agregarSeguido(otroUsuario)
-	}
-	
-	method agregarSeguido(usuario) {
-			usuariosQueSigue.add(usuario)
-	}
+      		return self.lugaresQueConoce().contains(unLugar)
+  } 
+  
+  	method lugaresQueConoce(){
+  		return viajes.map{viaje => viaje.localidadDestino()}
+  	}
+//        
+//	method obtenerKilometros() {
+//			return 0.1 * (self.precioTotalDeLosLugaresVisitados())
+//	}
+//	
+//	method precioTotalDeLosLugaresVisitados() {
+//			return lugaresQueConoce.sum { destino => destino.precio() }
+//	}
+//	
+//	method seguirAUsuario(otroUsuario) {
+//			otroUsuario.agregarSeguido(self)
+//			self.agregarSeguido(otroUsuario)
+//	}
+//	
+//	method agregarSeguido(usuario) {
+//			usuariosQueSigue.add(usuario)
+//	}
 	
 }
 
