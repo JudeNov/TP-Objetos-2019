@@ -95,7 +95,7 @@ object barrileteCosmico {
 			return viajes.filter { unViaje => unViaje.localidadDestinoEsDestacada() }
 	}
 	
-	method aplicarDescuentosADestinos(unDescuento) {
+	method aplicarDescuentosAViajes(unDescuento) {
 			viajes.forEach { unViaje => unViaje.aplicarDescuentoAlDestino(unDescuento) }
 	}
 	
