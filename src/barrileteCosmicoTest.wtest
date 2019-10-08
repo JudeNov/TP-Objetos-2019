@@ -17,6 +17,7 @@ describe "Barrilete Cósmico" {
 		var avion
 		var descuentoVeinticincoPorciento
 		var descuentoQuincePorciento
+		var preciosDeViajesConDescuento
 		
 		fixture { 
 			
@@ -96,6 +97,7 @@ describe "Barrilete Cósmico" {
 			
 			descuentoVeinticincoPorciento = new Descuento(porcentaje = 0.25)
 			descuentoQuincePorciento = new Descuento (porcentaje = 0.15)
+			preciosDeViajesConDescuento = [2125, 1147.5, 2975, 1275]
 		}
 	
 	
@@ -119,7 +121,6 @@ describe "Barrilete Cósmico" {
 	}
 	
 	test "Aplicando un descuento del 15% a todos los viajes de Barrilete Cosmico se obtienen los precios descontados."{
-		// var preciosDeViajesConDescuento = [2125, 1147.5, 2975, 1275]
 		barrileteCosmico.aplicarDescuentosAViajes(descuentoQuincePorciento)
 		assert.equals(preciosDeViajesConDescuento, barrileteCosmico.preciosDeLosViajes())
 		}
@@ -142,12 +143,16 @@ describe "Barrilete Cósmico" {
 		assert.equals(cartaDeViajes, barrileteCosmico.conocerCartaDeViajes())
 	}
 	
-	test "Los kilometros del usuario PHari son .... luego de viajar a Garlic´s Sea."{
-	
-		// assert.equals(, pabloHari.obtenerKilometros())
+	test "Los kilometros del usuario PHari luego de viajar a Garlic´s Sea son ..."{
+		pabloHari.dineroEnCuenta(160000)
+		pabloHari.viajes([]) 
+		viajeAGarlicSea.localidadOrigen(lastToninas)
+		pabloHari.hacerUnViaje(viajeAGarlicSea)
+		assert.equals(570,pabloHari.obtenerKilometros())
 	}
 	
 	test "PHari puede volar a Silver´s Sea."{
+		pabloHari.dineroEnCuenta(16000)
 		assert.that(pabloHari.puedeViajar(viajeASilversSea))
 	}
 	
@@ -162,13 +167,25 @@ describe "Barrilete Cósmico" {
         assert.that(pabloHari.viajoA(silversSea))
     }
 	
-	test "PHari posee ... en su cuenta luego de viajar a Silver´s Sea."{
+	test "PHari posee 150 en su cuenta luego de viajar a Silver´s Sea."{
+		pabloHari.dineroEnCuenta(1500)
+		viajeASilversSea.localidadOrigen(lastToninas)
 		pabloHari.hacerUnViaje(viajeASilversSea)
-		// assert.equals(..., pabloHari.dineroEnCuenta())
+		assert.equals(150, pabloHari.dineroEnCuenta())
 	}
 	
 	test "La distancia entre Garlic´s Sea y Silver´s Sea es 20." {
 		assert.equals(20 ,garlicSea.distanciaA(silversSea))
 	}
+	
+	test "Phari quiere viajar a lastToninas y ya se encuentra ahi"{
+		pabloHari.dineroEnCuenta(16000)
+		viajeALastToninas.localidadOrigen(lastToninas)
+		 // se lo modifico para que realmente falle 
+		assert.throwsExceptionWithMessage("Ya se encuentra en la localidad", { 
+			pabloHari.hacerUnViaje(viajeALastToninas)})
+			}
+	
 }
+
 	

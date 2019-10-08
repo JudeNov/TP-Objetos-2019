@@ -10,7 +10,11 @@ class Localidad {
 			return precioOriginal > 2000
 	}
 	
+	
 	method distanciaA(otraLocalidad) {
+			if (self == otraLocalidad){
+				throw new ViajeException(message = "Ya se encuentra en la localidad") // parece medio de cagon pero creo que esta bien porque seria raro que le tire un 0 al usuario
+			}
 			return (kilometroDeLocalidad - otraLocalidad.kilometroDeLocalidad()).abs() 
 	}
 	
@@ -122,7 +126,7 @@ object barrileteCosmico {
         
 	method armarViajePara(unUsuario, unDestino) {
 			var unViaje = new Viaje()
-			unViaje.localidadOrigen(unUsuario.localidadDeOrigen())
+			unViaje.localidadOrigen(unUsuario.localidadOrigen())
 			unViaje.localidadDestino(unDestino)
 			unViaje.transporte(self.seleccionarTransporte())
 			unUsuario.validarViaje(unViaje)
@@ -135,13 +139,13 @@ object barrileteCosmico {
 
 class Usuario {
 	var nombreDeUsuario
-	var localidadOrigen
-	var viajes
+	var property localidadOrigen
+	var property viajes
 	var usuariosQueSigue
 	var property dineroEnCuenta
 	
 	method hacerUnViaje(unViaje) {
-			//self.validarViajeA(unViaje)
+			self.validarViaje(unViaje)
 			self.agregarViajeRealizado(unViaje)
 			self.descontarDeLaCuenta(unViaje.precioDeViaje())
 			self.actualizarLocalidadDeOrigen(unViaje)
@@ -181,10 +185,6 @@ class Usuario {
   			return viajes.map { unViaje => unViaje.localidadDestino() }
   	}
 
-//	method precioTotalDeLosLugaresVisitados() {
-//			return lugaresQueConoce.sum { destino => destino.precio() }
-//	}
-	
 	method seguirAUsuario(otroUsuario) {
 			otroUsuario.agregarSeguido(self)
 			self.agregarSeguido(otroUsuario)
@@ -198,8 +198,7 @@ class Usuario {
 
 class Descuento {
 	var porcentaje 
-	//el porcentaje es indicado como un numero decimal, por ejemplo 10% es 0.1
-
+	
 	method calcularDescuento(unTotal) {
 			return unTotal * porcentaje
 	}
