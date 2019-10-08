@@ -2,12 +2,18 @@ import barrileteCosmico.*
 
 describe "Barrilete Cósmico" {
 	
-		var destinosDestacados
+		var localidades
+		var viajesDestacados
+		var viajeAGarlicSea
+		var viajeALastToninas
+		var viajeASilversSea
 		var garlicSea
 		var lastToninas
 		var silversSea
 		var goodAirs
 		var pabloHari
+		var micro
+		var avion
 		var descuentoVeinticincoPorciento
 		var descuentoQuincePorciento
 		
@@ -16,36 +22,69 @@ describe "Barrilete Cósmico" {
 			garlicSea = new Localidad(
 				nombre = "Garlic´s Sea",
 				precioOriginal = 2500,
-				equipaje = ["Caña de Pescar", "Piloto"]
+				equipaje = ["Caña de Pescar", "Piloto"],
+				kilometroDeLocalidad = 107
 			)
 			
 			silversSea = new Localidad(
 				nombre = "Silver's Sea",
 				precioOriginal = 1350,
-				equipaje = ["Protector Solar","Equipo de Buceo"]		
+				equipaje = ["Protector Solar","Equipo de Buceo"],
+				kilometroDeLocalidad = 87 		
 			)
 			
 			lastToninas = new Localidad(
 				nombre = "Last Toninas",
 				precioOriginal = 3500,
-				equipaje = ["Vacuna Gripal","Vacuna B","Necronomicon"]					
+				equipaje = ["Vacuna Gripal","Vacuna B","Necronomicon"],
+				kilometroDeLocalidad = 677					
 			)
 			
 			goodAirs= new Localidad(
 				nombre = "Good Airs",
 				precioOriginal = 1500,
-				equipaje = ["Cerveza","Protector Solar"]	
+				equipaje = ["Cerveza","Protector Solar"],
+				kilometroDeLocalidad = 200	
+			)
+			
+			micro = new Transporte(
+				horasDeViaje = 4,
+				precioPorKilometro = 50
+			)
+
+			avion = new Transporte(
+				horasDeViaje = 1,
+				precioPorKilometro = 100
+			)
+			
+			viajeAGarlicSea = new Viaje(
+				localidadOrigen = goodAirs,
+				localidadDestino = garlicSea,
+				transporte = micro
+			)
+
+			viajeALastToninas = new Viaje(
+				localidadOrigen = silversSea,
+				localidadDestino = lastToninas,
+				transporte = avion
+			)
+
+			viajeASilversSea = new Viaje(
+				localidadOrigen = goodAirs,
+				localidadDestino = silversSea,
+				transporte = micro
 			)
 				
-			destinosDestacados = [garlicSea, lastToninas]
-			barrileteCosmico.destinos([garlicSea,silversSea,lastToninas,goodAirs])
+			localidades = [garlicSea, silversSea, lastToninas, goodAirs]
+			viajesDestacados = [viajeAGarlicSea, viajeALastToninas]
+			barrileteCosmico.viajes([viajeAGarlicSea, viajeALastToninas, viajeASilversSea]) 
 			
 			pabloHari = new Usuario(
 				nombreDeUsuario = "PHari",
-				lugaresQueConoce = [lastToninas, goodAirs],
+				viajes = [],
 				dineroEnCuenta = 1500,
 				usuariosQueSigue = [],
-				localidad = lastToninas
+				localidadOrigen = lastToninas
 			) 
 			
 			descuentoVeinticincoPorciento = new Descuento(porcentaje = 0.25)
