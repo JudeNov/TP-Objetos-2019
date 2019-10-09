@@ -25,7 +25,7 @@ describe "Barrilete Cósmico" {
 				nombre = "Garlic´s Sea",
 				precioOriginal = 2500,
 				equipaje = ["Caña de Pescar", "Piloto"],
-				kilometroDeLocalidad = 107
+				kilometroDeLocalidad = 677
 			)
 			
 			silversSea = new Localidad(
@@ -39,19 +39,19 @@ describe "Barrilete Cósmico" {
 				nombre = "Last Toninas",
 				precioOriginal = 3500,
 				equipaje = ["Vacuna Gripal","Vacuna B","Necronomicon"],
-				kilometroDeLocalidad = 677					
+				kilometroDeLocalidad = 200					
 			)
 			
 			goodAirs= new Localidad(
 				nombre = "Good Airs",
 				precioOriginal = 1500,
 				equipaje = ["Cerveza","Protector Solar"],
-				kilometroDeLocalidad = 200	
+				kilometroDeLocalidad = 90	
 			)
 			
 			micro = new Transporte(
-				horasDeViaje = 4,
-				precioPorKilometro = 50
+				horasDeViaje = 2,
+				precioPorKilometro = 25
 			)
 
 			avion = new Transporte(
@@ -97,7 +97,7 @@ describe "Barrilete Cósmico" {
 			
 			descuentoVeinticincoPorciento = new Descuento(porcentaje = 0.25)
 			descuentoQuincePorciento = new Descuento (porcentaje = 0.15)
-			preciosDeViajesConDescuento = [2125, 1147.5, 2975, 1275]
+			preciosDeViajesConDescuento = [16800, 14275, 1222.5, 12275]
 		}
 	
 	
@@ -123,7 +123,7 @@ describe "Barrilete Cósmico" {
 	test "Aplicando un descuento del 15% a todos los viajes de Barrilete Cosmico se obtienen los precios descontados."{
 		barrileteCosmico.aplicarDescuentosAViajes(descuentoQuincePorciento)
 		assert.equals(preciosDeViajesConDescuento, barrileteCosmico.preciosDeLosViajes())
-		}
+	}
 	
 	test "Aplicando un descuento del 15% a todos los viajes de Barrilete Cosmico todos obtienen el certificado."{
 		barrileteCosmico.aplicarDescuentosAViajes(descuentoQuincePorciento)
@@ -143,13 +143,14 @@ describe "Barrilete Cósmico" {
 		assert.equals(cartaDeViajes, barrileteCosmico.conocerCartaDeViajes())
 	}
 	
-	test "Los kilometros del usuario PHari luego de viajar a Garlic´s Sea son ..."{
+	test "Los kilometros del usuario PHari luego de viajar a Garlic´s Sea son 587"{
 		pabloHari.dineroEnCuenta(160000)
-		pabloHari.viajes([]) 
 		viajeAGarlicSea.localidadOrigen(lastToninas)
 		pabloHari.hacerUnViaje(viajeAGarlicSea)
-		assert.equals(570,pabloHari.obtenerKilometros())
+		assert.equals(477, pabloHari.obtenerKilometros())
 	}
+	
+	
 	
 	test "PHari puede volar a Silver´s Sea."{
 		pabloHari.dineroEnCuenta(16000)
@@ -157,34 +158,31 @@ describe "Barrilete Cósmico" {
 	}
 	
 	test "PHari no puede volar a Silver's Sea." {
-		// pabloHari.descontarDeLaCuenta(1250)
+		pabloHari.descontarDeLaCuenta(1250)
 		assert.throwsExceptionWithMessage("No se puede viajar al destino.", { 
 			pabloHari.hacerUnViaje(viajeASilversSea)})
 	}
 	
 	test "PHari realiza un viaje a Silver's Sea y agrega el lugar a su historial."{
-        pabloHari.hacerUnViaje(viajeASilversSea)
+		pabloHari.hacerUnViaje(viajeASilversSea)
         assert.that(pabloHari.viajoA(silversSea))
     }
 	
-	test "PHari posee 150 en su cuenta luego de viajar a Silver´s Sea."{
-		pabloHari.dineroEnCuenta(1500)
-		viajeASilversSea.localidadOrigen(lastToninas)
+	test "PHari posee 75 en su cuenta luego de viajar a Silver´s Sea."{
 		pabloHari.hacerUnViaje(viajeASilversSea)
-		assert.equals(150, pabloHari.dineroEnCuenta())
+		assert.equals(75, pabloHari.dineroEnCuenta())
 	}
 	
-	test "La distancia entre Garlic´s Sea y Silver´s Sea es 20." {
-		assert.equals(20 ,garlicSea.distanciaA(silversSea))
+	test "La distancia entre Garlic´s Sea y Silver´s Sea es 590." {
+		assert.equals(590, garlicSea.distanciaA(silversSea))
 	}
 	
-	test "Phari quiere viajar a lastToninas y ya se encuentra ahi"{
+	test "Phari quiere viajar a lastToninas y ya se encuentra ahi."{
 		pabloHari.dineroEnCuenta(16000)
 		viajeALastToninas.localidadOrigen(lastToninas)
-		 // se lo modifico para que realmente falle 
 		assert.throwsExceptionWithMessage("Ya se encuentra en la localidad", { 
-			pabloHari.hacerUnViaje(viajeALastToninas)})
-			}
+		pabloHari.hacerUnViaje(viajeALastToninas) })
+	}
 	
 }
 

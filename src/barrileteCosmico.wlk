@@ -41,7 +41,9 @@ class Localidad {
     
     method kilometroDeLocalidad() = kilometroDeLocalidad
     
-    method precio() = precioOriginal
+    method precio(){
+			return precioOriginal - self.descuentosAplicados() 
+	} 
 }
 
 class Viaje {
