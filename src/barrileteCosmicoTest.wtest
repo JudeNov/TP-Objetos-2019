@@ -25,7 +25,7 @@ describe "Barrilete Cósmico" {
 				nombre = "Garlic´s Sea",
 				precioOriginal = 2500,
 				equipaje = ["Caña de Pescar", "Piloto"],
-				kilometroDeLocalidad = 677
+				kilometroDeLocalidad = 185
 			)
 			
 			silversSea = new Localidad(
@@ -95,95 +95,109 @@ describe "Barrilete Cósmico" {
 				localidadOrigen = lastToninas
 			) 
 			
+			barrileteCosmico.transportes([micro, avion])
 			descuentoVeinticincoPorciento = new Descuento(porcentaje = 0.25)
 			descuentoQuincePorciento = new Descuento (porcentaje = 0.15)
-			preciosDeViajesConDescuento = [16800, 14275, 1222.5, 12275]
+			preciosDeViajesConDescuento = [4500, 14275, 1222.5, 12275]
 		}
 	
 	
 	
-	test "Los viajes mas importantes del barrilete cosmico son Garlic´s Sea y Last Toninas."{
-		assert.equals(viajesDestacados, barrileteCosmico.obtenerViajesDestacados())
+	test "Los viajes mas importantes del barrilete cosmico son Garlic´s Sea y Last Toninas." {
+			assert.equals(viajesDestacados, barrileteCosmico.obtenerViajesDestacados())
 	}
 	
-	test "Aplicar 25% de descuento a Last Toninas y obtener un precio de 2625."{
-		lastToninas.aplicarDescuento(descuentoVeinticincoPorciento)
-		assert.equals(2625, lastToninas.precio())
+	test "Aplicar 25% de descuento a Last Toninas y obtener un precio de 2625." {
+			lastToninas.aplicarDescuento(descuentoVeinticincoPorciento)
+			assert.equals(2625, lastToninas.precio())
 	}
 			
-	test "Aplicar 25% de descuento a Last Toninas y adquirir el certificado de descuento."{
-		lastToninas.aplicarDescuento(descuentoVeinticincoPorciento)
-		assert.that(lastToninas.requiereEnEquipaje("Certificado de descuento"))
+	test "Aplicar 25% de descuento a Last Toninas y adquirir el certificado de descuento." {
+			lastToninas.aplicarDescuento(descuentoVeinticincoPorciento)
+			assert.that(lastToninas.requiereEnEquipaje("Certificado de descuento"))
 	}
 	
-	test "Silver's Sea no es una localidad peligrosa."{
-		assert.notThat(silversSea.esPeligrosa())
+	test "Silver's Sea no es una localidad peligrosa." {
+			assert.notThat(silversSea.esPeligrosa())
 	}
 	
-	test "Aplicando un descuento del 15% a todos los viajes de Barrilete Cosmico se obtienen los precios descontados."{
-		barrileteCosmico.aplicarDescuentosAViajes(descuentoQuincePorciento)
-		assert.equals(preciosDeViajesConDescuento, barrileteCosmico.preciosDeLosViajes())
+	test "Aplicando un descuento del 15% a todos los viajes de Barrilete Cosmico se obtienen los precios descontados." {
+			barrileteCosmico.aplicarDescuentosAViajes(descuentoQuincePorciento)
+			assert.equals(preciosDeViajesConDescuento, barrileteCosmico.preciosDeLosViajes())
 	}
 	
-	test "Aplicando un descuento del 15% a todos los viajes de Barrilete Cosmico todos obtienen el certificado."{
-		barrileteCosmico.aplicarDescuentosAViajes(descuentoQuincePorciento)
-		assert.that(barrileteCosmico.todosLosViajesPoseen("Certificado de descuento"))
+	test "Aplicando un descuento del 15% a todos los viajes de Barrilete Cosmico todos obtienen el certificado." {
+			barrileteCosmico.aplicarDescuentosAViajes(descuentoQuincePorciento)
+			assert.that(barrileteCosmico.todosLosViajesPoseen("Certificado de descuento"))
 	}
 	
-	test "El viaje mas peligroso es el de Last Toninas."{
-		  assert.equals([viajeALastToninas], barrileteCosmico.viajesConDestinosPeligrosos())
+	test "El viaje mas peligroso es el de Last Toninas." {
+		 	assert.equals([viajeALastToninas], barrileteCosmico.viajesConDestinosPeligrosos())
 	}
 	
-	test "Barrilete Cosmico es empresa extrema."{
-		assert.that(barrileteCosmico.esEmpresaExtrema())
+	test "Barrilete Cosmico es empresa extrema." {
+			assert.that(barrileteCosmico.esEmpresaExtrema())
 	}
 	
-	test "La carta de viajes de Barrilete Cosmico es Last Toninas, Garlic´s sea, Good Airs y Silver's Sea."{
-		var cartaDeViajes = [garlicSea, lastToninas, silversSea, goodAirs]
-		assert.equals(cartaDeViajes, barrileteCosmico.conocerCartaDeViajes())
+	test "La carta de viajes de Barrilete Cosmico es Last Toninas, Garlic´s sea, Good Airs y Silver's Sea." {
+			var cartaDeViajes = [garlicSea, lastToninas, silversSea, goodAirs]
+			assert.equals(cartaDeViajes, barrileteCosmico.conocerCartaDeViajes())
 	}
 	
-	test "Los kilometros del usuario PHari luego de viajar a Garlic´s Sea son 587"{
-		pabloHari.dineroEnCuenta(160000)
-		viajeAGarlicSea.localidadOrigen(lastToninas)
-		pabloHari.hacerUnViaje(viajeAGarlicSea)
-		assert.equals(477, pabloHari.obtenerKilometros())
+	test "Los kilometros del usuario PHari luego de viajar a Garlic´s Sea son 15." {
+			pabloHari.dineroEnCuenta(160000)
+			viajeAGarlicSea.localidadOrigen(lastToninas)
+			pabloHari.hacerUnViaje(viajeAGarlicSea)
+			assert.equals(15, pabloHari.obtenerKilometros())
 	}
 	
-	
-	
-	test "PHari puede volar a Silver´s Sea."{
-		pabloHari.dineroEnCuenta(16000)
-		assert.that(pabloHari.puedeViajar(viajeASilversSea))
+	test "PHari sigue a un nuevo usuario y lo agrega a sus seguidos." {
+			var usuarioNuevo = new Usuario()
+			pabloHari.seguirAUsuario(usuarioNuevo)
+			assert.equals([usuarioNuevo], pabloHari.usuariosQueSigue())
+	}
+
+	test "PHari puede volar a Silver´s Sea." {
+			assert.that(pabloHari.puedeViajar(viajeASilversSea))
 	}
 	
 	test "PHari no puede volar a Silver's Sea." {
-		pabloHari.descontarDeLaCuenta(1250)
-		assert.throwsExceptionWithMessage("No se puede viajar al destino.", { 
+			pabloHari.descontarDeLaCuenta(1250)
+			assert.throwsExceptionWithMessage("No se puede viajar al destino.", { 
 			pabloHari.hacerUnViaje(viajeASilversSea)})
 	}
 	
-	test "PHari realiza un viaje a Silver's Sea y agrega el lugar a su historial."{
-		pabloHari.hacerUnViaje(viajeASilversSea)
-        assert.that(pabloHari.viajoA(silversSea))
+	test "PHari realiza un viaje a Silver's Sea y agrega el lugar a su historial." {
+			pabloHari.hacerUnViaje(viajeASilversSea)
+       		assert.that(pabloHari.viajoA(silversSea))
     }
 	
-	test "PHari posee 75 en su cuenta luego de viajar a Silver´s Sea."{
-		pabloHari.hacerUnViaje(viajeASilversSea)
-		assert.equals(75, pabloHari.dineroEnCuenta())
+	test "PHari posee 75 en su cuenta luego de viajar a Silver´s Sea." {
+			pabloHari.hacerUnViaje(viajeASilversSea)
+			assert.equals(75, pabloHari.dineroEnCuenta())
 	}
 	
 	test "La distancia entre Garlic´s Sea y Silver´s Sea es 590." {
-		assert.equals(590, garlicSea.distanciaA(silversSea))
+			assert.equals(98, garlicSea.distanciaA(silversSea))
 	}
 	
 	test "Phari quiere viajar a lastToninas y ya se encuentra ahi."{
-		pabloHari.dineroEnCuenta(16000)
-		viajeALastToninas.localidadOrigen(lastToninas)
-		assert.throwsExceptionWithMessage("Ya se encuentra en la localidad", { 
-		pabloHari.hacerUnViaje(viajeALastToninas) })
+			pabloHari.dineroEnCuenta(16000)
+			viajeALastToninas.localidadOrigen(lastToninas)
+			assert.throwsExceptionWithMessage("Ya se encuentra en la localidad", { 
+			pabloHari.hacerUnViaje(viajeALastToninas) })
 	}
 	
+	test "La empresa Barrilete Cosmico no puede armar el viaje a Garlic's Sea para el usuario PHari." {
+			assert.throwsExceptionWithMessage("No se puede viajar al destino.",{ barrileteCosmico.armarViajePara(pabloHari, garlicSea) })
+	}
+			
+	test "PHari realiza el viaje armado por Barrilete Cosmico y posee una nueva localidad de origen." {
+			pabloHari.dineroEnCuenta(16000)
+			var unViaje = barrileteCosmico.armarViajePara(pabloHari, garlicSea)
+			pabloHari.hacerUnViaje(unViaje)
+			assert.equals(garlicSea, pabloHari.localidadOrigen())
+	}
 }
 
 	

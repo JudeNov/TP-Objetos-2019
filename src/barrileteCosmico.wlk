@@ -95,7 +95,7 @@ object vacunasRegistradas {
 
 object barrileteCosmico {
 	var property viajes = []
-	var transportes = [] // quizas conviene que sea un set (marti)
+	var property transportes = [] // quizas conviene que sea un set (marti)
 	
 	method obtenerViajesDestacados() {
 			return viajes.filter { unViaje => unViaje.localidadDestinoEsDestacada() }
@@ -127,11 +127,13 @@ object barrileteCosmico {
     }
         
 	method armarViajePara(unUsuario, unDestino) {
-			var unViaje = new Viaje()
-			unViaje.localidadOrigen(unUsuario.localidadOrigen())
-			unViaje.localidadDestino(unDestino)
-			unViaje.transporte(self.seleccionarTransporte())
+			var unViaje = new Viaje(
+				localidadOrigen = unUsuario.localidadOrigen(),
+				localidadDestino = unDestino,
+			    transporte = self.seleccionarTransporte()
+			)
 			unUsuario.validarViaje(unViaje)
+			return unViaje
 	}
 
 	method seleccionarTransporte() {
@@ -143,7 +145,7 @@ class Usuario {
 	var nombreDeUsuario
 	var property localidadOrigen
 	var property viajes
-	var usuariosQueSigue
+	var usuariosQueSigue = []
 	var property dineroEnCuenta
 	
 	method hacerUnViaje(unViaje) {
@@ -195,6 +197,8 @@ class Usuario {
 	method agregarSeguido(usuario) {
 			usuariosQueSigue.add(usuario)
 	}
+	
+	method usuariosQueSigue() = usuariosQueSigue
 	
 }
 
