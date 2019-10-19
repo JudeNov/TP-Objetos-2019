@@ -12,16 +12,13 @@ class Localidad {
 	
 	
 	method distanciaA(otraLocalidad) {
-			if (self == otraLocalidad){
-				throw new ViajeException(message = "Ya se encuentra en la localidad") // parece medio de cagon pero creo que esta bien porque seria raro que le tire un 0 al usuario
-			}
 			return (kilometroDeLocalidad - otraLocalidad.kilometroDeLocalidad()).abs() 
 	}
 	
 	method aplicarDescuento(unDescuento) {
 			descuentos.add(unDescuento) 
 			equipaje.add("Certificado de descuento")
-	} // donde unDescuento es una instancia de la clase descuento
+	} 
 	
 	method descuentosAplicados() {
 			return descuentos.sum { descuento => descuento.calcularDescuento(precioOriginal) } 
@@ -35,15 +32,46 @@ class Localidad {
 			return equipaje.contains(unElemento)
 	}
 		
-	method esPeligrosa() {
-        	return self.requiereLlevarVacuna()
-    }
+	method esPeligrosa()
     
     method kilometroDeLocalidad() = kilometroDeLocalidad
     
     method precio(){
 			return precioOriginal - self.descuentosAplicados() 
 	} 
+}
+
+object playa inherits Localidad{
+	
+	override method esPeligrosa(){
+		return false
+	}
+}
+
+class Montania inherits Localidad{
+	const altura
+	
+	override method esPeligrosa(){
+		return altura > 500 and
+			   self.requiereLlevarVacuna()
+	}
+	
+	override method esDestacada(){
+		return true
+	}
+}
+
+class CiudadHistorica inherits Localidad{
+	var cantidadMuseos
+	
+	override method esPeligrosa(){
+		return self.requiereEnEquipaje("Seguro de asistencia")
+	}
+	
+	override method esDestacada(){
+		return cantidadMuseos >= 3 and
+			   super()
+	}
 }
 
 class Viaje {
