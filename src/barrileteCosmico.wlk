@@ -32,7 +32,9 @@ class Localidad {
 			return equipaje.contains(unElemento)
 	}
 		
-	method esPeligrosa()
+	method esPeligrosa(){
+		return self.requiereLlevarVacuna()
+	}
     
     method kilometroDeLocalidad() = kilometroDeLocalidad
     
@@ -52,8 +54,8 @@ class Montania inherits Localidad{
 	const altura
 	
 	override method esPeligrosa(){
-		return altura > 500 and
-			   self.requiereLlevarVacuna()
+		super()
+		return altura > 5000 
 	}
 	
 	override method esDestacada(){
@@ -65,7 +67,7 @@ class CiudadHistorica inherits Localidad{
 	var cantidadMuseos
 	
 	override method esPeligrosa(){
-		return self.requiereEnEquipaje("Seguro de asistencia")
+		return self.requiereEnEquipaje("Seguro de asistencia").equals(false)
 	}
 	
 	override method esDestacada(){
@@ -106,12 +108,47 @@ class Viaje {
 
 class Transporte {
 	var horasDeViaje
-	var precioPorKilometro
+	
+	method precioPorKm()
 	
 	method precioDeTransporteEntre(localidadDeOrigen, localidadDeDestino) {
-			return precioPorKilometro * (localidadDeOrigen.distanciaA(localidadDeDestino))
+			return self.precioPorKm() * (localidadDeOrigen.distanciaA(localidadDeDestino))
 	}
 } 
+
+class Avion inherits Transporte{
+	
+	var cantTurbinas
+	var nivelDeImpulsoTurbinas
+	
+	override method precioPorKm(){
+		return cantTurbinas * nivelDeImpulsoTurbinas
+	}
+	
+}
+
+class Barco inherits Transporte{
+	var probabilidadChoque
+	
+	override method precioPorKm(){
+		return 1000 * probabilidadChoque
+	}
+}
+
+object micro inherits Transporte{
+	
+	override method precioPorKm(){
+		return 5000
+	}
+}
+
+object Tren inherits Transporte{
+	
+	
+	override method precioPorKm(){
+		return 0.6 * 2300
+	}
+}
 
 object vacunasRegistradas {
 	var property vacunas = ["Vacuna Gripal", "Vacuna B"]
@@ -123,7 +160,7 @@ object vacunasRegistradas {
 
 object barrileteCosmico {
 	var property viajes = []
-	var property transportes = [] // quizas conviene que sea un set (marti)
+	var property transportes = [] 
 	
 	method obtenerViajesDestacados() {
 			return viajes.filter { unViaje => unViaje.localidadDestinoEsDestacada() }
@@ -158,14 +195,14 @@ object barrileteCosmico {
 			var unViaje = new Viaje(
 				localidadOrigen = unUsuario.localidadOrigen(),
 				localidadDestino = unDestino,
-			    transporte = self.seleccionarTransporte()
+			    transporte = self.seleccionarTransporte(unUsuario)
 			)
 			unUsuario.validarViaje(unViaje)
 			return unViaje
 	}
 
-	method seleccionarTransporte() {
-			return transportes.anyOne()
+	method seleccionarTransporte(unUsuario) {
+			return unUsuario.transporteCorrespondiente(transportes)
 	}
 }
 
@@ -175,6 +212,7 @@ class Usuario {
 	var property viajes
 	var usuariosQueSigue = []
 	var property dineroEnCuenta
+	var property perfil 
 	
 	method hacerUnViaje(unViaje) {
 			self.validarViaje(unViaje)
@@ -228,7 +266,24 @@ class Usuario {
 	
 	method usuariosQueSigue() = usuariosQueSigue
 	
+	method transporteCorrespondiente(unosTransportes){
+		return perfil.seleccionarTransporte(unosTransportes)
+	}
+
 }
+
+class Perfil{
+	method seleccionarTransporte(unosTransportes)
+}
+
+object perfilEmpresarial inherits Perfil{
+	override method seleccionarTransporte(unosTransportes){
+		return unosTransportes.min{transporte=>
+			transporte.horasDeViaje()
+		}
+	}
+}
+
 
 class Descuento {
 	var porcentaje 
