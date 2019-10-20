@@ -189,14 +189,14 @@ object barrileteCosmico {
 			var unViaje = new Viaje(
 				localidadOrigen = unUsuario.localidadOrigen(),
 				localidadDestino = unDestino,
-			    transporte = self.seleccionarTransporte(unUsuario)
+			    transporte = self.seleccionarTransporte(unUsuario,unViaje.distanciaRecorrida())
 			)
 			unUsuario.validarViaje(unViaje)
 			return unViaje
 	}
 
-	method seleccionarTransporte(unUsuario) {
-			return unUsuario.transporteCorrespondiente(transportes)
+	method seleccionarTransporte(unUsuario,kmsDelViaje) {
+			return unUsuario.transporteCorrespondiente(transportes,kmsDelViaje)
 	}
 }
 
@@ -260,50 +260,46 @@ class Usuario {
 	
 	method usuariosQueSigue() = usuariosQueSigue
 	
-	method transporteCorrespondiente(unosTransportes){
-		return perfil.seleccionarTransporte(unosTransportes)
+	method transporteCorrespondiente(unosTransportes,kmsDelViaje){
+		return perfil.seleccionarTransporte(unosTransportes,self,kmsDelViaje)
 	}
 
 }
 
 class Perfil{
-	method seleccionarTransporte(unosTransportes)
+	
+	method seleccionarTransporte(unosTransportes,unUsuario,kmsDelViaje)
 	method transporteMasRapido(unosTransportes) {
 		return unosTransportes.min { unTransporte => unTransporte.horasDeViaje() }
 	}
 }
 
 object perfilEmpresarial inherits Perfil {
-	override method seleccionarTransporte(unosTransportes) {
+	
+	override method seleccionarTransporte(unosTransportes,unUsuario,kmsDelViaje) {
 		return self.transporteMasRapido(unosTransportes)
 	}
 }
 
-//No me convence que el perfil tenga la responsabilidad de saber cual es el trasnporte mas rapido, pero 
-//por ahora lo dejo asi. Cuando se me ocurra algo mejor lo cambio :) (Juli)
 object perfilEstudiantil inherits Perfil {
-		var presupuesto 
-		//Tengo duda de si el presupuesto es propio del perfil estudiantil o hace referencia al dinero en la cuenta del usuario.
-		override method seleccionarTransporte(unosTransportes) {
-				return self.transporteMasRapido(self.transportesQuePuedeCostear(unosTransportes))
+		
+		
+		override method seleccionarTransporte(unosTransportes,unUsuario,kmsDelViaje) {
+				return self.transporteMasRapido(self.transportesQuePuedeCostear(unosTransportes,unUsuario,kmsDelViaje))
 		}
 		
-		method transportesQuePuedeCostear(unosTransportes) {
-				return unosTransportes.filter { unTransporte => self.alcanzaElPresupuestoPara(unTransporte) }
+		method transportesQuePuedeCostear(unosTransportes,unUsuario,kmsDelViaje) {
+				return unosTransportes.filter { unTransporte => self.alcanzaElPresupuestoPara(unTransporte,unUsuario,kmsDelViaje) }
 		}
 		
-		/*method alcanzaElPresupuestoPara(unTransporte) {
-				return presupuesto >= unTransporte.
-		} 
-		Aca me da la sensacion de que deberia pasarse al usuario como parametro al perfil
-		para saber cuanto saldria el viaje que quiere hacer en un determinado transporte.Ahi 
-		ya cambiarian varias cosas en la logica de lo que hay que hacer al seleccionar el transporte en
-		cada perfil. (Juli)
-		*/
+		method alcanzaElPresupuestoPara(unTransporte,unUsuario,kmsDelViaje){
+			return unUsuario.presupuesto() >= kmsDelViaje * unTransporte.precioPorKm()
+		}
+		
 }
 
 object perfilGrupoFamiliar inherits Perfil {
-		override method seleccionarTransporte(unosTransportes) {
+		override method seleccionarTransporte(unosTransportes,unUsuario,kmsDelViaje) {
 				return unosTransportes.anyOne()
 		}
 }
