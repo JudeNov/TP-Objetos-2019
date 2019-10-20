@@ -43,36 +43,29 @@ class Localidad {
 	} 
 }
 
-object playa inherits Localidad{
-	
-	override method esPeligrosa(){
-		return false
-	}
+object playa inherits Localidad {
+	override method esPeligrosa() = false
 }
 
 class Montania inherits Localidad{
 	const altura
 	
 	override method esPeligrosa(){
-		super()
-		return altura > 5000 
+		return altura > 5000 and super() 
 	}
 	
-	override method esDestacada(){
-		return true
-	}
+	override method esDestacada() = true
 }
 
-class CiudadHistorica inherits Localidad{
+class CiudadHistorica inherits Localidad {
 	var cantidadMuseos
 	
 	override method esPeligrosa(){
-		return self.requiereEnEquipaje("Seguro de asistencia").equals(false)
+			return self.requiereEnEquipaje("Seguro de asistencia").negate()
 	}
 	
 	override method esDestacada(){
-		return cantidadMuseos >= 3 and
-			   super()
+			return cantidadMuseos >= 3 and super()
 	}
 }
 
@@ -116,15 +109,20 @@ class Transporte {
 	}
 } 
 
-class Avion inherits Transporte{
+class Avion inherits Transporte {
 	
-	var cantTurbinas
-	var nivelDeImpulsoTurbinas
-	
-	override method precioPorKm(){
-		return cantTurbinas * nivelDeImpulsoTurbinas
+	var turbinas = []
+		
+	override method precioPorKm() {
+		return turbinas.sum { unaTurbina => unaTurbina.nivelImpulso() }
 	}
 	
+}
+
+class Turbina {
+	var nivelImpulso
+	
+	method nivelImpulso() = nivelImpulso
 }
 
 class Barco inherits Transporte{
@@ -135,15 +133,11 @@ class Barco inherits Transporte{
 	}
 }
 
-object micro inherits Transporte{
-	
-	override method precioPorKm(){
-		return 5000
-	}
+object micro inherits Transporte {
+	override method precioPorKm() = 5000
 }
 
-object Tren inherits Transporte{
-	
+object tren inherits Transporte{
 	
 	override method precioPorKm(){
 		return 0.6 * 2300
@@ -160,7 +154,7 @@ object vacunasRegistradas {
 
 object barrileteCosmico {
 	var property viajes = []
-	var property transportes = [] 
+	var property transportes = #{}
 	
 	method obtenerViajesDestacados() {
 			return viajes.filter { unViaje => unViaje.localidadDestinoEsDestacada() }
@@ -222,7 +216,7 @@ class Usuario {
 	}
 	
 	method actualizarLocalidadDeOrigen(unViaje) {
-		localidadOrigen = unViaje.localidadDestino()
+			localidadOrigen = unViaje.localidadDestino()
 	}
 	
 	method agregarViajeRealizado(unViaje) {
@@ -274,16 +268,45 @@ class Usuario {
 
 class Perfil{
 	method seleccionarTransporte(unosTransportes)
-}
-
-object perfilEmpresarial inherits Perfil{
-	override method seleccionarTransporte(unosTransportes){
-		return unosTransportes.min{transporte=>
-			transporte.horasDeViaje()
-		}
+	method transporteMasRapido(unosTransportes) {
+		return unosTransportes.min { unTransporte => unTransporte.horasDeViaje() }
 	}
 }
 
+object perfilEmpresarial inherits Perfil {
+	override method seleccionarTransporte(unosTransportes) {
+		return self.transporteMasRapido(unosTransportes)
+	}
+}
+
+//No me convence que el perfil tenga la responsabilidad de saber cual es el trasnporte mas rapido, pero 
+//por ahora lo dejo asi. Cuando se me ocurra algo mejor lo cambio :) (Juli)
+object perfilEstudiantil inherits Perfil {
+		var presupuesto 
+		//Tengo duda de si el presupuesto es propio del perfil estudiantil o hace referencia al dinero en la cuenta del usuario.
+		override method seleccionarTransporte(unosTransportes) {
+				return self.transporteMasRapido(self.transportesQuePuedeCostear(unosTransportes))
+		}
+		
+		method transportesQuePuedeCostear(unosTransportes) {
+				return unosTransportes.filter { unTransporte => self.alcanzaElPresupuestoPara(unTransporte) }
+		}
+		
+		/*method alcanzaElPresupuestoPara(unTransporte) {
+				return presupuesto >= unTransporte.
+		} 
+		Aca me da la sensacion de que deberia pasarse al usuario como parametro al perfil
+		para saber cuanto saldria el viaje que quiere hacer en un determinado transporte.Ahi 
+		ya cambiarian varias cosas en la logica de lo que hay que hacer al seleccionar el transporte en
+		cada perfil. (Juli)
+		*/
+}
+
+object perfilGrupoFamiliar inherits Perfil {
+		override method seleccionarTransporte(unosTransportes) {
+				return unosTransportes.anyOne()
+		}
+}
 
 class Descuento {
 	var porcentaje 
