@@ -137,7 +137,7 @@ object micro inherits Transporte {
 	override method precioPorKm() = 5000
 }
 
-object tren inherits Transporte{
+object tren inherits Transporte {
 	
 	override method precioPorKm(){
 		return 0.6 * 2300
@@ -189,15 +189,33 @@ object barrileteCosmico {
 			var unViaje = new Viaje(
 				localidadOrigen = unUsuario.localidadOrigen(),
 				localidadDestino = unDestino,
-			    transporte = self.seleccionarTransporte(unUsuario,unViaje.distanciaRecorrida())
+			   	transporte = null //self.seleccionarTransporte(unUsuario, unViaje.distanciaRecorrida()) */ 
 			)
+			unUsuario.seleccionarTransporte(unViaje, transportes)
 			unUsuario.validarViaje(unViaje)
 			return unViaje
 	}
-
-	method seleccionarTransporte(unUsuario,kmsDelViaje) {
-			return unUsuario.transporteCorrespondiente(transportes,kmsDelViaje)
+	
+	method transporteMasRapido() {
+				return self.transporteMasRapidoEntre(transportes)
 	}
+	
+	method transporteCosteableYRapidoPara(unUsuario, unViaje) {
+				return self.transporteMasRapidoEntre(self.transportesCosteablesPor(unUsuario, unViaje)) 
+	}
+	
+	method transporteMasRapidoEntre(unosTransportes) {
+				return unosTransportes.min { unTransporte => unTransporte.horasDeViaje() }
+	}
+	
+	method transportesCosteablesPor(unUsuario, unViaje) {
+				return transportes.filter { unTransporte => unUsuario.leAlcanzaElPresupuesto(unViaje, unTransporte) }
+	}
+	
+	method transporteAleatorio() {
+			return transportes.anyOne()
+	}
+	
 }
 
 class Usuario {
@@ -260,47 +278,36 @@ class Usuario {
 	
 	method usuariosQueSigue() = usuariosQueSigue
 	
-	method transporteCorrespondiente(unosTransportes,kmsDelViaje){
-		return perfil.seleccionarTransporte(unosTransportes,self,kmsDelViaje)
+	method seleccionarTransporte(unViaje, unosTransportes){
+		return perfil.seleccionarTransporte(unosTransportes, self, unViaje)
 	}
-
-}
-
-class Perfil{
 	
-	method seleccionarTransporte(unosTransportes,unUsuario,kmsDelViaje)
-	method transporteMasRapido(unosTransportes) {
-		return unosTransportes.min { unTransporte => unTransporte.horasDeViaje() }
+	method leAlcanzaElPresupuesto(unViaje, unTransporte){
+			return dineroEnCuenta >= unTransporte.precioDeTransporteEntre(unViaje.localidadOrigen(), unViaje.localidadDestino()) 
 	}
+
 }
 
-object perfilEmpresarial inherits Perfil {
+//Borre la clase porque no tenia sentido tener un metodo que se sobreescribia todo el tiempo,
+//no estaban compartiendo ningun comportamiento. Asi que lo deje como que el perfil es una interfaz.
+
+object perfilEmpresarial {
 	
-	override method seleccionarTransporte(unosTransportes,unUsuario,kmsDelViaje) {
-		return self.transporteMasRapido(unosTransportes)
+	method seleccionarTransporte(unUsuario, unViaje) {
+			return barrileteCosmico.transporteMasRapido()
 	}
 }
 
-object perfilEstudiantil inherits Perfil {
+object perfilEstudiantil {
 		
-		
-		override method seleccionarTransporte(unosTransportes,unUsuario,kmsDelViaje) {
-				return self.transporteMasRapido(self.transportesQuePuedeCostear(unosTransportes,unUsuario,kmsDelViaje))
-		}
-		
-		method transportesQuePuedeCostear(unosTransportes,unUsuario,kmsDelViaje) {
-				return unosTransportes.filter { unTransporte => self.alcanzaElPresupuestoPara(unTransporte,unUsuario,kmsDelViaje) }
-		}
-		
-		method alcanzaElPresupuestoPara(unTransporte,unUsuario,kmsDelViaje){
-			return unUsuario.presupuesto() >= kmsDelViaje * unTransporte.precioPorKm()
-		}
-		
+		method seleccionarTransporte(unUsuario, unViaje) {
+				return barrileteCosmico.transporteCosteableYRapidoPara(unUsuario, unViaje)
+		}				
 }
 
-object perfilGrupoFamiliar inherits Perfil {
-		override method seleccionarTransporte(unosTransportes,unUsuario,kmsDelViaje) {
-				return unosTransportes.anyOne()
+object perfilGrupoFamiliar{
+		method seleccionarTransporte(unUsuario, unViaje) {
+				return barrileteCosmico.transporteAleatorio()
 		}
 }
 
@@ -312,6 +319,4 @@ class Descuento {
 	}
 }
 
-class ViajeException inherits Exception {
-	
-}
+class ViajeException inherits Exception { }
