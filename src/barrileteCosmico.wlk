@@ -1,7 +1,7 @@
 
 class Localidad {
 	var property nombre 
-	var equipaje 
+	var equipajeNecesario 
 	var descuentos = [] 
 	const kilometroDeLocalidad
 	const precioOriginal
@@ -17,7 +17,7 @@ class Localidad {
 	
 	method aplicarDescuento(unDescuento) {
 			descuentos.add(unDescuento) 
-			equipaje.add("Certificado de descuento")
+			equipajeNecesario.add("Certificado de descuento")
 	} 
 	
 	method descuentosAplicados() {
@@ -29,7 +29,7 @@ class Localidad {
 	} 
 
 	method requiereEnEquipaje(unElemento) {
-			return equipaje.contains(unElemento)
+			return equipajeNecesario.contains(unElemento)
 	}
 		
 	method esPeligrosa(){
@@ -41,6 +41,11 @@ class Localidad {
     method precio(){
 			return precioOriginal - self.descuentosAplicados() 
 	} 
+	
+	method poseeEquipaje(cliente){
+		return equipajeNecesario.all({elemento=>cliente.tieneEnMochila(elemento)})
+	}
+	
 }
 
 object playa inherits Localidad {
@@ -97,10 +102,17 @@ class Viaje {
 	method aplicarDescuentoAlDestino(unDescuento){
 			localidadDestino.aplicarDescuento(unDescuento)
 	}
+	
+	method poseeEquipaje(cliente){
+		localidadDestino.poseeEquipaje(cliente)
+	}
 }
 
 class Transporte {
 	var horasDeViaje
+  //var velocidad
+	
+  //method velocidad() = return velocidad
 	
 	method precioPorKm()
 	
@@ -140,7 +152,7 @@ object micro inherits Transporte {
 object tren inherits Transporte {
 	
 	override method precioPorKm(){
-		return 0.6 * 2300
+		return 0.62 * 2300
 	}
 }
 
@@ -206,6 +218,7 @@ object barrileteCosmico {
 	
 	method transporteMasRapidoEntre(unosTransportes) {
 				return unosTransportes.min { unTransporte => unTransporte.horasDeViaje() }
+			  //return unosTransportes.max{ unTransporte => unTransporte.velocidad() }
 	}
 	
 	method transportesCosteablesPor(unUsuario, unViaje) {
@@ -224,7 +237,8 @@ class Usuario {
 	var property viajes
 	var usuariosQueSigue = []
 	var property dineroEnCuenta
-	var property perfil 
+	var property perfil
+	var mochila
 	
 	method hacerUnViaje(unViaje) {
 			self.validarViaje(unViaje)
@@ -252,7 +266,19 @@ class Usuario {
 	}
 	
 	method puedeViajar(unViaje) {
-			return dineroEnCuenta >= unViaje.precioDeViaje()
+			return self.poseeDineroParaElViaje(unViaje) and self.tieneEquipajeNecesario(unViaje) 
+	}
+	
+	method poseeDineroParaElViaje(unViaje){
+		return dineroEnCuenta >= unViaje.precioDeViaje()
+	}
+	
+	method tieneEquipajeNecesario(unViaje){
+		return unViaje.poseeEquipaje(self)
+	}
+	
+	method tieneEnMochila(elemento){
+		return mochila.contains(elemento)
 	}
 	
 	method obtenerKilometros(){
