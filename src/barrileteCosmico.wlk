@@ -10,7 +10,6 @@ class Localidad {
 			return precioOriginal > 2000
 	}
 	
-	
 	method distanciaA(otraLocalidad) {
 			return (kilometroDeLocalidad - otraLocalidad.kilometroDeLocalidad()).abs() 
 	}
@@ -126,7 +125,7 @@ class Avion inherits Transporte {
 	var turbinas = []
 		
 	override method precioPorKm() {
-		return turbinas.sum { unaTurbina => unaTurbina.nivelImpulso() }
+		return turbinas.sum {unaTurbina => unaTurbina.nivelImpulso()}
 	}
 	
 }
