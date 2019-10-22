@@ -20,7 +20,7 @@ class Localidad {
 	} 
 	
 	method descuentosAplicados() {
-			return descuentos.sum { descuento => descuento.calcularDescuento(precioOriginal) } 
+			return descuentos.sum { unDescuento => unDescuento.calcularDescuento(precioOriginal) } 
 	}
 	
 	method requiereLlevarVacuna() {
@@ -31,19 +31,16 @@ class Localidad {
 			return equipajeNecesario.contains(unElemento)
 	}
 		
-	method esPeligrosa(){
-		return self.requiereLlevarVacuna()
+	method esPeligrosa() {
+			return self.requiereLlevarVacuna()
 	}
-    
-    method kilometroDeLocalidad() = kilometroDeLocalidad
-    
-    method precio(){
+        
+    method precio() {
 			return precioOriginal - self.descuentosAplicados() 
 	} 
 	
-	method poseeEquipaje(cliente){
-		return equipajeNecesario.all({elemento=>cliente.tieneEnMochila(elemento)})
-	}
+	method kilometroDeLocalidad() = kilometroDeLocalidad
+	method equipajeNecesario() = equipajeNecesario
 	
 }
 
@@ -54,8 +51,8 @@ object playa inherits Localidad {
 class Montania inherits Localidad{
 	const altura
 	
-	override method esPeligrosa(){
-		return altura > 5000 and super() 
+	override method esPeligrosa() {
+			return altura > 5000 and super() 
 	}
 	
 	override method esDestacada() = true
@@ -64,11 +61,11 @@ class Montania inherits Localidad{
 class CiudadHistorica inherits Localidad {
 	var cantidadMuseos
 	
-	override method esPeligrosa(){
+	override method esPeligrosa() {
 			return self.requiereEnEquipaje("Seguro de asistencia").negate()
 	}
 	
-	override method esDestacada(){
+	override method esDestacada() {
 			return cantidadMuseos >= 3 and super()
 	}
 }
@@ -82,28 +79,32 @@ class Viaje {
 			return localidadDestino.precio() + transporte.precioDeTransporteEntre(localidadOrigen, localidadDestino) 
 	}
 	
-	method elViajeEsPeligroso(){
+	method elViajeEsPeligroso() {
 			return localidadDestino.esPeligrosa()
 	}
 	
-	method localidadDestinoEsDestacada(){
+	method localidadDestinoEsDestacada() {
 			return localidadDestino.esDestacada()
 	}
 	
-	method distanciaRecorrida(){
+	method distanciaRecorrida() {
 			return localidadDestino.distanciaA(localidadOrigen)
 	}
 	
-	method requiereLlevar(unItem){
+	method requiereLlevar(unItem) {
 			return localidadDestino.requiereEnEquipaje(unItem)
 	}
 	
-	method aplicarDescuentoAlDestino(unDescuento){
+	method aplicarDescuentoAlDestino(unDescuento) {
 			localidadDestino.aplicarDescuento(unDescuento)
 	}
+
+	method asignarTransporte(unTransporte) {
+			transporte = unTransporte
+	}
 	
-	method poseeEquipaje(cliente){
-		localidadDestino.poseeEquipaje(cliente)
+	method equipajeNecesario() {
+			return localidadDestino.equipajeNecesario()
 	}
 }
 
@@ -118,14 +119,15 @@ class Transporte {
 	method precioDeTransporteEntre(localidadDeOrigen, localidadDeDestino) {
 			return self.precioPorKm() * (localidadDeOrigen.distanciaA(localidadDeDestino))
 	}
+	
+	method horasDeViaje() = horasDeViaje
 } 
 
 class Avion inherits Transporte {
-	
 	var turbinas = []
 		
 	override method precioPorKm() {
-		return turbinas.sum {unaTurbina => unaTurbina.nivelImpulso()}
+			return turbinas.sum { unaTurbina => unaTurbina.nivelImpulso() }
 	}
 	
 }
@@ -136,11 +138,11 @@ class Turbina {
 	method nivelImpulso() = nivelImpulso
 }
 
-class Barco inherits Transporte{
+class Barco inherits Transporte {
 	var probabilidadChoque
 	
-	override method precioPorKm(){
-		return 1000 * probabilidadChoque
+	override method precioPorKm() {
+			return 1000 * probabilidadChoque
 	}
 }
 
@@ -150,8 +152,8 @@ object micro inherits Transporte {
 
 object tren inherits Transporte {
 	
-	override method precioPorKm(){
-		return 0.62 * 2300
+	override method precioPorKm() {
+			return 0.62 * 2300
 	}
 }
 
@@ -200,9 +202,9 @@ object barrileteCosmico {
 			var unViaje = new Viaje(
 				localidadOrigen = unUsuario.localidadOrigen(),
 				localidadDestino = unDestino,
-			   	transporte = null //self.seleccionarTransporte(unUsuario, unViaje.distanciaRecorrida()) */ 
+			   	transporte = null //Luego de seleccionar el transporte se le asigna el transorte adecuado.
 			)
-			unUsuario.seleccionarTransporte(unViaje, transportes)
+			unUsuario.seleccionarTransporte(unViaje)
 			unUsuario.validarViaje(unViaje)
 			return unViaje
 	}
@@ -216,12 +218,12 @@ object barrileteCosmico {
 	}
 	
 	method transporteMasRapidoEntre(unosTransportes) {
-				return unosTransportes.min { unTransporte => unTransporte.horasDeViaje() }
+			return unosTransportes.min { unTransporte => unTransporte.horasDeViaje() }
 			  //return unosTransportes.max{ unTransporte => unTransporte.velocidad() }
 	}
 	
 	method transportesCosteablesPor(unUsuario, unViaje) {
-				return transportes.filter { unTransporte => unUsuario.leAlcanzaElPresupuesto(unViaje, unTransporte) }
+			return transportes.filter { unTransporte => unUsuario.leAlcanzaElPresupuesto(unViaje, unTransporte) }
 	}
 	
 	method transporteAleatorio() {
@@ -255,32 +257,39 @@ class Usuario {
 	}
 	
 	method validarViaje(unViaje) {
-			if(!self.puedeViajar(unViaje)){
-				throw new ViajeException(message = "No se puede viajar al destino.")		
-			}	
+			self.validarEquipaje(unViaje)
+			self.validarPresupuesto(unViaje)	
 	}
 		
 	method descontarDeLaCuenta(unMonto) {
 			dineroEnCuenta -= unMonto
 	}
 	
-	method puedeViajar(unViaje) {
-			return self.poseeDineroParaElViaje(unViaje) and self.tieneEquipajeNecesario(unViaje) 
+	method validarPresupuesto(unViaje) {
+			if(!self.poseeDineroParaElViaje(unViaje)) {
+				throw new ViajeException(message = "No puede viajar al destino por falta de dinero.")		
+			}	
 	}
 	
-	method poseeDineroParaElViaje(unViaje){
-		return dineroEnCuenta >= unViaje.precioDeViaje()
+	method validarEquipaje(unViaje) {
+			if(!self.tieneEquipajeNecesarioPara(unViaje)) {
+				throw new ViajeException(message = "No puede viajar al destino por falta del equipaje adecuado.")		
+			}	
 	}
 	
-	method tieneEquipajeNecesario(unViaje){
-		return unViaje.poseeEquipaje(self)
+	method poseeDineroParaElViaje(unViaje) {
+			return dineroEnCuenta >= unViaje.precioDeViaje()
 	}
 	
-	method tieneEnMochila(elemento){
-		return mochila.contains(elemento)
+	method tieneEquipajeNecesarioPara(unViaje) {	
+			return unViaje.equipajeNecesario().all { unElemento => self.tieneEnMochila(unElemento) }
 	}
 	
-	method obtenerKilometros(){
+	method tieneEnMochila(unElemento) {
+			return mochila.contains(unElemento)
+	}
+	
+	method obtenerKilometros() {
 			return viajes.sum { unViaje => unViaje.distanciaRecorrida() }
 	}
 	
@@ -303,11 +312,11 @@ class Usuario {
 	
 	method usuariosQueSigue() = usuariosQueSigue
 	
-	method seleccionarTransporte(unViaje, unosTransportes){
-		return perfil.seleccionarTransporte(unosTransportes, self, unViaje)
+	method seleccionarTransporte(unViaje) {
+			unViaje.asignarTransporte(perfil.seleccionarTransporte(self, unViaje))
 	}
 	
-	method leAlcanzaElPresupuesto(unViaje, unTransporte){
+	method leAlcanzaElPresupuesto(unViaje, unTransporte) {
 			return dineroEnCuenta >= unTransporte.precioDeTransporteEntre(unViaje.localidadOrigen(), unViaje.localidadDestino()) 
 	}
 
@@ -330,7 +339,7 @@ object perfilEstudiantil {
 		}				
 }
 
-object perfilGrupoFamiliar{
+object perfilGrupoFamiliar {
 		method seleccionarTransporte(unUsuario, unViaje) {
 				return barrileteCosmico.transporteAleatorio()
 		}
