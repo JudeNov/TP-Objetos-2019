@@ -318,6 +318,10 @@ class Usuario {
 	method leAlcanzaElPresupuesto(unViaje, unTransporte) {
 			return dineroEnCuenta >= unTransporte.precioDeTransporteEntre(unViaje.localidadOrigen(), unViaje.localidadDestino()) 
 	}
+	
+	method agregarAMochila(unElemento){ //metodo utilizado para un test
+		mochila.add(unElemento)
+	}
 
 }
 

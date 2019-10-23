@@ -13,6 +13,7 @@ describe "Barrilete Cósmico" {
 		var silversSea
 		var goodAirs
 		var pabloHari
+		var nestorPerez
 		var unAvion
 		var barco
 		var descuentoVeinticincoPorciento
@@ -72,7 +73,7 @@ describe "Barrilete Cósmico" {
 			)
 
 			viajeASilversSea = new Viaje(
-				localidadOrigen = goodAirs,
+				localidadOrigen = lastToninas,
 				localidadDestino = silversSea,
 				transporte = micro
 			)
@@ -95,12 +96,22 @@ describe "Barrilete Cósmico" {
 				usuariosQueSigue = [],
 				localidadOrigen = lastToninas,
 				perfil = perfilEmpresarial,
-				mochila = ["Vacuna Gripal","Vacuna B","Necronomicon","Caña de Pescar", "Piloto"]
-			) 
+				mochila = ["Protector Solar","Equipo de Buceo", "Caña de Pescar", "Piloto"]
+			)
+			
+			nestorPerez = new Usuario(
+				nombreDeUsuario = "NPerez",
+				viajes = [],
+				dineroEnCuenta = 566425,
+				usuariosQueSigue = [],
+				localidadOrigen = lastToninas,
+				perfil = perfilEstudiantil,
+				mochila = [] 
+				)
 			
 			descuentoVeinticincoPorciento = new Descuento(porcentaje = 0.25)
-			descuentoQuincePorciento = new Descuento (porcentaje = 0.15)
-			preciosDeViajesConDescuento = [477125, 2975, 16147.5, 1275] //los precios varian ya que el total depende tambien del valor del transporte
+			descuentoQuincePorciento = new Descuento(porcentaje = 0.15)
+			preciosDeViajesConDescuento = [477125, 2975, 566147.5, 1275] //los precios varian ya que el total depende tambien del valor del transporte
 		}
 	
 	
@@ -159,23 +170,31 @@ describe "Barrilete Cósmico" {
 			assert.equals([usuarioNuevo], pabloHari.usuariosQueSigue())
 	}
 	
-	test "PHari no puede volar a Silver's Sea." {
-			pabloHari.descontarDeLaCuenta(1250)
+	test "NPerez no puede viajar a Silver's Sea por no poseer el equipaje requerido." {
 			assert.throwsExceptionWithMessage("No puede viajar al destino por falta del equipaje adecuado.", { 
-			pabloHari.hacerUnViaje(viajeASilversSea)})
+			nestorPerez.hacerUnViaje(viajeASilversSea)})
 	}
 	
-	test "PHari realiza un viaje a Silver's Sea y agrega el lugar a su historial." {
+	test "PHari no puede viajar a Silver's Sea por no poseer suficiente dinero."{
+			assert.throwsExceptionWithMessage("No puede viajar al destino por falta de dinero.",{	
 			pabloHari.hacerUnViaje(viajeASilversSea)
-       		assert.notThat(pabloHari.viajoA(silversSea))
+	}
+	
+	test "NPerez realiza un viaje a Silver's Sea y agrega el lugar a su historial." {
+			nestorPerez.agregarAMochila("Protector Solar")
+			nestorPerez.agregarAMochila("Equipo de Buceo")
+			nestorPerez.hacerUnViaje(viajeASilversSea)
+       		assert.that(nestorPerez.viajoA(silversSea))
     }
 	
-	test "PHari posee 75 en su cuenta luego de viajar a Silver´s Sea." {
-			pabloHari.hacerUnViaje(viajeASilversSea)
-			assert.equals(75, pabloHari.dineroEnCuenta())
+	test "NPerez posee 75 en su cuenta luego de viajar a Silver´s Sea." {
+			nestorPerez.agregarAMochila("Protector Solar")
+			nestorPerez.agregarAMochila("Equipo de Buceo")
+			nestorPerez.hacerUnViaje(viajeASilversSea)
+			assert.equals(75, nestorPerez.dineroEnCuenta())
 	}
 	
-	test "La distancia entre Garlic´s Sea y Silver´s Sea es 590." {
+	test "La distancia entre Garlic´s Sea y Silver´s Sea es 98." {
 			assert.equals(98, garlicSea.distanciaA(silversSea))
 	}
 
@@ -195,8 +214,5 @@ describe "Barrilete Cósmico" {
 	}
 	
 	test "El transporte elegido por Pablo Hari es ...."{
-		// falta definir como calcular la velocidad
 	}
 }
-
-	
