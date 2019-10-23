@@ -75,6 +75,12 @@ class Viaje {
 	var property localidadDestino
 	var property transporte
 	
+	constructor(_localidadOrigen, _localidadDestino, _transporte){
+		localidadOrigen = _localidadOrigen
+		localidadDestino = _localidadDestino
+		transporte = _transporte  
+	}
+	
 	method precioDeViaje() {
 			return localidadDestino.precio() + transporte.precioDeTransporteEntre(localidadOrigen, localidadDestino) 
 	}
@@ -110,10 +116,7 @@ class Viaje {
 
 class Transporte {
 	var horasDeViaje
-  //var velocidad
-	
-  //method velocidad() = return velocidad
-	
+  
 	method precioPorKm()
 	
 	method precioDeTransporteEntre(localidadDeOrigen, localidadDeDestino) {
@@ -199,11 +202,8 @@ object barrileteCosmico {
     }
         
 	method armarViajePara(unUsuario, unDestino) {
-			var unViaje = new Viaje(
-				localidadOrigen = unUsuario.localidadOrigen(),
-				localidadDestino = unDestino,
-			   	transporte = null //Luego de seleccionar el transporte se le asigna el transorte adecuado.
-			)
+			var unViaje = new Viaje(unUsuario.localidadOrigen(), unDestino, null) 
+			//Luego de seleccionar el transporte se le asigna el transorte adecuado.
 			unUsuario.seleccionarTransporte(unViaje)
 			unUsuario.validarViaje(unViaje)
 			return unViaje
@@ -219,7 +219,6 @@ object barrileteCosmico {
 	
 	method transporteMasRapidoEntre(unosTransportes) {
 			return unosTransportes.min { unTransporte => unTransporte.horasDeViaje() }
-			  //return unosTransportes.max{ unTransporte => unTransporte.velocidad() }
 	}
 	
 	method transportesCosteablesPor(unUsuario, unViaje) {

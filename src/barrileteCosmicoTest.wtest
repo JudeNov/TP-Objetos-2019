@@ -161,7 +161,7 @@ describe "Barrilete Cósmico" {
 	
 	test "PHari no puede volar a Silver's Sea." {
 			pabloHari.descontarDeLaCuenta(1250)
-			assert.throwsExceptionWithMessage("No se puede viajar al destino.", { 
+			assert.throwsExceptionWithMessage("No puede viajar al destino por falta del equipaje adecuado.", { 
 			pabloHari.hacerUnViaje(viajeASilversSea)})
 	}
 	
@@ -178,14 +178,7 @@ describe "Barrilete Cósmico" {
 	test "La distancia entre Garlic´s Sea y Silver´s Sea es 590." {
 			assert.equals(98, garlicSea.distanciaA(silversSea))
 	}
-	
-	test "Phari quiere viajar a lastToninas y ya se encuentra ahi."{
-			pabloHari.dineroEnCuenta(16000)
-			viajeALastToninas.localidadOrigen(lastToninas)
-			assert.throwsExceptionWithMessage("Ya se encuentra en la localidad", { 
-			pabloHari.hacerUnViaje(viajeALastToninas) })
-	}
-	
+
 	test "La empresa Barrilete Cosmico no puede armar el viaje a Garlic's Sea para el usuario PHari." {
 			assert.throwsExceptionWithMessage("No se puede viajar al destino.",{ barrileteCosmico.armarViajePara(pabloHari, garlicSea) })
 	}
