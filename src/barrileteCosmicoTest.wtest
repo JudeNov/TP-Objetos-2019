@@ -1,219 +1,145 @@
 import barrileteCosmico.*
 
 describe "Barrilete Cósmico" {
-	
-		var localidades
-		var viajesDestacados
-		var viajeAGarlicSea
-		var viajeALastToninas
-		var viajeASilversSea
-		var viajeAGoodAirs
-		var garlicSea
-		var lastToninas
-		var silversSea
-		var goodAirs
-		var pabloHari
-		var nestorPerez
-		var unAvion
-		var barco
-		var descuentoVeinticincoPorciento
-		var descuentoQuincePorciento
-		var preciosDeViajesConDescuento
-		
-		fixture { 
-			
-			garlicSea = new Localidad(
-				nombre = "Garlic´s Sea",
-				precioOriginal = 2500,
-				equipajeNecesario = ["Caña de Pescar", "Piloto"],
-				kilometroDeLocalidad = 185
-			)
-			
-			silversSea = new Localidad(
-				nombre = "Silver's Sea",
-				precioOriginal = 1350,
-				equipajeNecesario = ["Protector Solar","Equipo de Buceo"],
-				kilometroDeLocalidad = 87 		
-			)
-			
-			lastToninas = new Localidad(
-				nombre = "Last Toninas",
-				precioOriginal = 3500,
-				equipajeNecesario = ["Vacuna Gripal","Vacuna B","Necronomicon"],
-				kilometroDeLocalidad = 200					
-			)
-			
-			goodAirs= new Localidad(
-				nombre = "Good Airs",
-				precioOriginal = 1500,
-				equipajeNecesario = ["Cerveza","Protector Solar"],
-				kilometroDeLocalidad = 90	
-			)
-		
-			unAvion = new Avion(
-				horasDeViaje = 1, 
-				turbinas = []
-			)
-			
-			barco = new Barco(
-				horasDeViaje = 7,
-				probabilidadChoque = 13
-			)
-			
-			viajeAGarlicSea = new Viaje(
-				localidadOrigen = goodAirs,
-				localidadDestino = garlicSea,
-				transporte = micro
-			)
 
-			viajeALastToninas = new Viaje(
-				localidadOrigen = silversSea,
-				localidadDestino = lastToninas,
-				transporte = unAvion
-			)
+	var localidades
+	var viajesDestacados
+	var viajeAGarlicSea
+	var viajeALastToninas
+	var viajeASilversSea
+	var viajeAGoodAirs
+	var garlicSea
+	var lastToninas
+	var silversSea
+	var goodAirs
+	var pabloHari
+	var nestorPerez
+	var unAvion
+	var barco
+	var descuentoVeinticincoPorciento
+	var descuentoQuincePorciento
+	var preciosDeViajesConDescuento
 
-			viajeASilversSea = new Viaje(
-				localidadOrigen = lastToninas,
-				localidadDestino = silversSea,
-				transporte = micro
-			)
-				
-			viajeAGoodAirs = new Viaje(
-				localidadOrigen = lastToninas,
-				localidadDestino = goodAirs,
-				transporte = unAvion
-			)
-			
-			localidades = [garlicSea, silversSea, lastToninas, goodAirs]
-			viajesDestacados = [viajeAGarlicSea, viajeALastToninas]
-			barrileteCosmico.viajes([viajeAGarlicSea, viajeALastToninas, viajeASilversSea, viajeAGoodAirs]) 
-			barrileteCosmico.transportes([unAvion, micro, barco, tren])
-			
-			pabloHari = new Usuario(
-				nombreDeUsuario = "PHari",
-				viajes = [],
-				dineroEnCuenta = 1500,
-				usuariosQueSigue = [],
-				localidadOrigen = lastToninas,
-				perfil = perfilEmpresarial,
-				mochila = ["Protector Solar","Equipo de Buceo", "Caña de Pescar", "Piloto"]
-			)
-			
-			nestorPerez = new Usuario(
-				nombreDeUsuario = "NPerez",
-				viajes = [],
-				dineroEnCuenta = 566425,
-				usuariosQueSigue = [],
-				localidadOrigen = lastToninas,
-				perfil = perfilEstudiantil,
-				mochila = [] 
-				)
-			
-			descuentoVeinticincoPorciento = new Descuento(porcentaje = 0.25)
-			descuentoQuincePorciento = new Descuento(porcentaje = 0.15)
-			preciosDeViajesConDescuento = [477125, 2975, 566147.5, 1275] //los precios varian ya que el total depende tambien del valor del transporte
-		}
-	
-	
-	
+	fixture {
+		garlicSea = new Localidad(nombre = "Garlic´s Sea", precioOriginal = 2500, equipajeNecesario = [ "Caña de Pescar", "Piloto" ], kilometroDeLocalidad = 185)
+		silversSea = new Localidad(nombre = "Silver's Sea", precioOriginal = 1350, equipajeNecesario = [ "Protector Solar", "Equipo de Buceo" ], kilometroDeLocalidad = 87)
+		lastToninas = new Localidad(nombre = "Last Toninas", precioOriginal = 3500, equipajeNecesario = [ "Vacuna Gripal", "Vacuna B", "Necronomicon" ], kilometroDeLocalidad = 200)
+		goodAirs = new Localidad(nombre = "Good Airs", precioOriginal = 1500, equipajeNecesario = [ "Cerveza", "Protector Solar" ], kilometroDeLocalidad = 90)
+		unAvion = new Avion(horasDeViaje = 1, turbinas = [])
+		barco = new Barco(horasDeViaje = 7, probabilidadChoque = 13)
+		viajeAGarlicSea = new Viaje(localidadOrigen = goodAirs, localidadDestino = garlicSea, transporte = micro)
+		viajeALastToninas = new Viaje(localidadOrigen = silversSea, localidadDestino = lastToninas, transporte = unAvion)
+		viajeASilversSea = new Viaje(localidadOrigen = lastToninas, localidadDestino = silversSea, transporte = micro)
+		viajeAGoodAirs = new Viaje(localidadOrigen = lastToninas, localidadDestino = goodAirs, transporte = unAvion)
+		localidades = [ garlicSea, silversSea, lastToninas, goodAirs ]
+		viajesDestacados = [ viajeAGarlicSea, viajeALastToninas ]
+		barrileteCosmico.viajes([ viajeAGarlicSea, viajeALastToninas, viajeASilversSea, viajeAGoodAirs ])
+		barrileteCosmico.transportes([ unAvion, micro, barco, tren ])
+		pabloHari = new Usuario(nombreDeUsuario = "PHari", viajes = [], dineroEnCuenta = 1500, usuariosQueSigue = [], localidadOrigen = lastToninas, perfil = perfilEmpresarial, mochila = [ "Protector Solar", "Equipo de Buceo", "Caña de Pescar", "Piloto" ])
+		nestorPerez = new Usuario(nombreDeUsuario = "NPerez", viajes = [], dineroEnCuenta = 566425, usuariosQueSigue = [], localidadOrigen = lastToninas, perfil = perfilEstudiantil, mochila = [])
+		descuentoVeinticincoPorciento = new Descuento(porcentaje = 0.25)
+		descuentoQuincePorciento = new Descuento(porcentaje = 0.15)
+		preciosDeViajesConDescuento = [ 477125, 2975, 566147.5, 1275 ] // los precios varian ya que el total depende tambien del valor del transporte
+	}
+
 	test "Los viajes mas importantes del barrilete cosmico son Garlic´s Sea y Last Toninas." {
-			assert.equals(viajesDestacados, barrileteCosmico.obtenerViajesDestacados())
+		assert.equals(viajesDestacados, barrileteCosmico.obtenerViajesDestacados())
 	}
-	
+
 	test "Aplicar 25% de descuento a Last Toninas y obtener un precio de 2625." {
-			lastToninas.aplicarDescuento(descuentoVeinticincoPorciento)
-			assert.equals(2625, lastToninas.precio())
+		lastToninas.aplicarDescuento(descuentoVeinticincoPorciento)
+		assert.equals(2625, lastToninas.precio())
 	}
-			
+
 	test "Aplicar 25% de descuento a Last Toninas y adquirir el certificado de descuento." {
-			lastToninas.aplicarDescuento(descuentoVeinticincoPorciento)
-			assert.that(lastToninas.requiereEnEquipaje("Certificado de descuento"))
+		lastToninas.aplicarDescuento(descuentoVeinticincoPorciento)
+		assert.that(lastToninas.requiereEnEquipaje("Certificado de descuento"))
 	}
-	
+
 	test "Silver's Sea no es una localidad peligrosa." {
-			assert.notThat(silversSea.esPeligrosa())
+		assert.notThat(silversSea.esPeligrosa())
 	}
-	
+
 	test "Aplicando un descuento del 15% a todos los viajes de Barrilete Cosmico se obtienen los precios descontados." {
-			barrileteCosmico.aplicarDescuentosAViajes(descuentoQuincePorciento)
-			assert.equals(preciosDeViajesConDescuento, barrileteCosmico.preciosDeLosViajes())
+		barrileteCosmico.aplicarDescuentosAViajes(descuentoQuincePorciento)
+		assert.equals(preciosDeViajesConDescuento, barrileteCosmico.preciosDeLosViajes())
 	}
-	
+
 	test "Aplicando un descuento del 15% a todos los viajes de Barrilete Cosmico todos obtienen el certificado." {
-			barrileteCosmico.aplicarDescuentosAViajes(descuentoQuincePorciento)
-			assert.that(barrileteCosmico.todosLosViajesPoseen("Certificado de descuento"))
+		barrileteCosmico.aplicarDescuentosAViajes(descuentoQuincePorciento)
+		assert.that(barrileteCosmico.todosLosViajesPoseen("Certificado de descuento"))
 	}
-	
+
 	test "El viaje mas peligroso es el de Last Toninas." {
-		 	assert.equals([viajeALastToninas], barrileteCosmico.viajesConDestinosPeligrosos())
+		assert.equals([ viajeALastToninas ], barrileteCosmico.viajesConDestinosPeligrosos())
 	}
-	
+
 	test "Barrilete Cosmico es empresa extrema." {
-			assert.that(barrileteCosmico.esEmpresaExtrema())
+		assert.that(barrileteCosmico.esEmpresaExtrema())
 	}
-	
+
 	test "La carta de viajes de Barrilete Cosmico es Last Toninas, Garlic´s sea, Good Airs y Silver's Sea." {
-			var cartaDeViajes = [garlicSea, lastToninas, silversSea, goodAirs]
-			assert.equals(cartaDeViajes, barrileteCosmico.conocerCartaDeViajes())
+		var cartaDeViajes = [ garlicSea, lastToninas, silversSea, goodAirs ]
+		assert.equals(cartaDeViajes, barrileteCosmico.conocerCartaDeViajes())
 	}
-	
+
 	test "Los kilometros del usuario PHari luego de viajar a Garlic´s Sea son 15." {
-			pabloHari.dineroEnCuenta(160000)
-			viajeAGarlicSea.localidadOrigen(lastToninas)
-			pabloHari.hacerUnViaje(viajeAGarlicSea)
-			assert.equals(15, pabloHari.obtenerKilometros())
+		pabloHari.dineroEnCuenta(160000)
+		viajeAGarlicSea.localidadOrigen(lastToninas)
+		pabloHari.hacerUnViaje(viajeAGarlicSea)
+		assert.equals(15, pabloHari.obtenerKilometros())
 	}
-	
+
 	test "PHari sigue a un nuevo usuario y lo agrega a sus seguidos." {
-			var usuarioNuevo = new Usuario()
-			pabloHari.seguirAUsuario(usuarioNuevo)
-			assert.equals([usuarioNuevo], pabloHari.usuariosQueSigue())
+		var usuarioNuevo = new Usuario()
+		pabloHari.seguirAUsuario(usuarioNuevo)
+		assert.equals([ usuarioNuevo ], pabloHari.usuariosQueSigue())
 	}
-	
+
 	test "NPerez no puede viajar a Silver's Sea por no poseer el equipaje requerido." {
-			assert.throwsExceptionWithMessage("No puede viajar al destino por falta del equipaje adecuado.", { 
-			nestorPerez.hacerUnViaje(viajeASilversSea)})
+		assert.throwsExceptionWithMessage("No puede viajar al destino por falta del equipaje adecuado.", { nestorPerez.hacerUnViaje(viajeASilversSea)})
 	}
-	
-	test "PHari no puede viajar a Silver's Sea por no poseer suficiente dinero."{
-			assert.throwsExceptionWithMessage("No puede viajar al destino por falta de dinero.",{	
-			pabloHari.hacerUnViaje(viajeASilversSea)
+
+	test "PHari no puede viajar a Silver's Sea por no poseer suficiente dinero." {
+		assert.throwsExceptionWithMessage("No puede viajar al destino por falta de dinero.", { pabloHari.hacerUnViaje(viajeASilversSea)})
 	}
-	
+
 	test "NPerez realiza un viaje a Silver's Sea y agrega el lugar a su historial." {
-			nestorPerez.agregarAMochila("Protector Solar")
-			nestorPerez.agregarAMochila("Equipo de Buceo")
-			nestorPerez.hacerUnViaje(viajeASilversSea)
-       		assert.that(nestorPerez.viajoA(silversSea))
-    }
-	
-	test "NPerez posee 75 en su cuenta luego de viajar a Silver´s Sea." {
-			nestorPerez.agregarAMochila("Protector Solar")
-			nestorPerez.agregarAMochila("Equipo de Buceo")
-			nestorPerez.hacerUnViaje(viajeASilversSea)
-			assert.equals(75, nestorPerez.dineroEnCuenta())
+		nestorPerez.agregarAMochila("Protector Solar")
+		nestorPerez.agregarAMochila("Equipo de Buceo")
+		nestorPerez.hacerUnViaje(viajeASilversSea)
+		assert.that(nestorPerez.viajoA(silversSea))
 	}
-	
+
+	test "NPerez posee 75 en su cuenta luego de viajar a Silver´s Sea." {
+		nestorPerez.agregarAMochila("Protector Solar")
+		nestorPerez.agregarAMochila("Equipo de Buceo")
+		nestorPerez.hacerUnViaje(viajeASilversSea)
+		assert.equals(75, nestorPerez.dineroEnCuenta())
+	}
+
 	test "La distancia entre Garlic´s Sea y Silver´s Sea es 98." {
-			assert.equals(98, garlicSea.distanciaA(silversSea))
+		assert.equals(98, garlicSea.distanciaA(silversSea))
 	}
 
 	test "La empresa Barrilete Cosmico no puede armar el viaje a Garlic's Sea para el usuario PHari." {
-			assert.throwsExceptionWithMessage("No puede viajar al destino por falta de dinero.",{ barrileteCosmico.armarViajePara(pabloHari, garlicSea) })
+		assert.throwsExceptionWithMessage("No puede viajar al destino por falta de dinero.", { barrileteCosmico.armarViajePara(pabloHari, garlicSea)})
 	}
-			
+
 	test "PHari realiza el viaje armado por Barrilete Cosmico y posee una nueva localidad de origen." {
-			pabloHari.dineroEnCuenta(1600000)
-			var unViaje = barrileteCosmico.armarViajePara(pabloHari, garlicSea)
-			pabloHari.hacerUnViaje(unViaje)
-			assert.equals(garlicSea, pabloHari.localidadOrigen())
+		pabloHari.dineroEnCuenta(1600000)
+		var unViaje = barrileteCosmico.armarViajePara(pabloHari, garlicSea)
+		pabloHari.hacerUnViaje(unViaje)
+		assert.equals(garlicSea, pabloHari.localidadOrigen())
 	}
-	
-	test "El precio del transporte para el viaje de Good Airs a Garlic's Sea es de $475.000"{
-		assert.equals(475000,micro.precioDeTransporteEntre(goodAirs,garlicSea))
+
+	test "El precio del transporte para el viaje de Good Airs a Garlic's Sea es de $475.000" {
+		assert.equals(475000, micro.precioDeTransporteEntre(goodAirs, garlicSea))
 	}
-	
-	test "El transporte elegido por Pablo Hari es ...."{
+
+	test "El transporte elegido por Pablo Hari es ...." {
 		assert.equals(micro, perfilEmpresarial.seleccionarTransporte(pabloHari, viajeAGarlicSea))
 	}
+
 }
+
