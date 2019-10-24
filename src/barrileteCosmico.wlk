@@ -115,7 +115,7 @@ class Viaje {
 }
 
 class Transporte {
-	var horasDeViaje
+	var horasDeViaje = 0
   
 	method precioPorKm()
 	

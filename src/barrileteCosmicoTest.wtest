@@ -199,11 +199,11 @@ describe "Barrilete Cósmico" {
 	}
 
 	test "La empresa Barrilete Cosmico no puede armar el viaje a Garlic's Sea para el usuario PHari." {
-			assert.throwsExceptionWithMessage("No se puede viajar al destino.",{ barrileteCosmico.armarViajePara(pabloHari, garlicSea) })
+			assert.throwsExceptionWithMessage("No puede viajar al destino por falta de dinero.",{ barrileteCosmico.armarViajePara(pabloHari, garlicSea) })
 	}
 			
 	test "PHari realiza el viaje armado por Barrilete Cosmico y posee una nueva localidad de origen." {
-			pabloHari.dineroEnCuenta(16000)
+			pabloHari.dineroEnCuenta(1600000)
 			var unViaje = barrileteCosmico.armarViajePara(pabloHari, garlicSea)
 			pabloHari.hacerUnViaje(unViaje)
 			assert.equals(garlicSea, pabloHari.localidadOrigen())
@@ -214,5 +214,6 @@ describe "Barrilete Cósmico" {
 	}
 	
 	test "El transporte elegido por Pablo Hari es ...."{
+		assert.equals(micro, perfilEmpresarial.seleccionarTransporte(pabloHari, viajeAGarlicSea))
 	}
 }
